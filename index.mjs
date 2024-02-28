@@ -43,7 +43,6 @@ export const handler = async (event, context) => {
           })
         );
 
-        
         body = body.Item;
         break;
       case "GET /items":

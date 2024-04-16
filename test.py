@@ -22,7 +22,6 @@ def lambda_handler(event, context):
         'status code': 200,
         'body' : json.dumps('Hello from Lambda!'),
         "Response": response
-
     }
     
     

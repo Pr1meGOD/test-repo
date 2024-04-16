@@ -5,7 +5,7 @@ try:
   import boto3
   print("all modelues loaded...")
 except Exception as e:
-  print ("Some modules are missing")
+  print ("Some modules are missing {}".format(e))
 
 def lambda_handler(event, context):
 
@@ -20,6 +20,9 @@ def lambda_handler(event, context):
 
     return {
         'status code': 200,
+        'body' : json.dumps('Hello from Lambda!'),
+        "Response": response
+
     }
     
     

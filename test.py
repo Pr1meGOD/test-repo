@@ -3,7 +3,7 @@ try:
     
   import json
   import boto3
-  print("all modelues loaded...")
+  print("all modules loaded...")
 except Exception as e:
   print ("Some modules are missing {}".format(e))
 

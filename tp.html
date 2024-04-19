@@ -45,7 +45,7 @@
 
 
 <div id="inputdiv">
- <textarea cols="150" rows="20" id="inputText"> </textarea>
+ <textarea cols="120" rows="17" id="inputText"> </textarea>
 </div>
 
 
@@ -63,13 +63,21 @@
 
 <hr>
 
-
-<div id="sentimentResult">
+<div id="outputdiv">
     <h3> 
         Sentiment is: 
     </h3>
-    
+
 </div>
+
+
+<div id="sentimentResult"> 
+    <p>
+        hello
+    </p>
+</div>
+
+
 
 
 
@@ -117,13 +125,22 @@
     }
 
     #sentimentResult{
-        margin-left: 650px;
-        margin-top: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+       
+     
         font-size: 20px;
         font-family: 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
     }
     textarea{
         font-size: 18px;
+    }
+    #outputdiv{
+        margin-left: 650px;
+        margin-top: 70px;
+        font-size: 20px;
+        font-family: 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
     }
 
 

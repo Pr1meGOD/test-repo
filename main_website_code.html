@@ -25,7 +25,7 @@
                 });
 
                 const data = await response.json();
-                document.getElementById('sentimentResult').innerText = 'Sentiment: ${result.sentiment}' ;
+                document.getElementById('sentimentResult').innerText = 'Sentiment: ${data.result.sentiment}' ;
             
             } catch (error) {
                 console.error('Error:', error);

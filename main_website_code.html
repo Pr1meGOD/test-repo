@@ -17,7 +17,10 @@
                     method:'POST',
                     body:JSON.stringify({ Text:text }),
                     headers: {
-                        'Content-Type' : 'application/json'
+                        'Content-Type' : 'application/json',
+                        'Access-Control-Allow-Origin': 'http://mainbucket18april.s3-website-us-east-1.amazonaws.com',
+                        'Access-Control-Allow-Headers': 'Content-Type',
+                        'Access-Control-Allow-Methods': 'POST'
                     }
                 });
 

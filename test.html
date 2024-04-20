@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@600&display=swap" rel="stylesheet">
+
+    <script>
+        async function performSentimentAnalysis(){
+            const text = document.getElementById('inputText').value;
+
+            try{
+                const response = await fetch('https://dhjoure0fa.execute-api.us-east-1.amazonaws.com/dev_stage/', {
+                    mode:"cors",
+                    method:'POST',
+                    body:JSON.stringify({ Text:text }),
+                    headers: {
+                        'Content-Type' : 'application/json',
+                        'Access-Control-Allow-Origin': 'http://testbucket20april.s3-website-us-east-1.amazonaws.com',
+                        'Access-Control-Allow-Headers': 'Content-Type',
+                        'Access-Control-Allow-Methods': 'POST, OPTIONS'
+                    }
+                });
+
+                const data = await response.json();
+                document.getElementById('sentimentResult').innerText = 'Sentiment: ${data.sentiment}' ;
+            
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('sentimentResult').innerText = 'Error performing Sentiment Analysis.';
+            }
+        }
+       
+    </script>
+
+    <title>Sentiment Analysis</title>
+</head>
+<body>
+    <h1>
+        <span>
+            SENTIMENT ANALYSIS
+        </span>
+        
+    </h1>
+
+
+<div id="inputdiv">
+ <textarea cols="120" rows="17" id="inputText"> </textarea>
+</div>
+
+
+
+
+<div id="buttondiv" >
+<button onclick="performSentimentAnalysis()">
+    Analyze 
+ </button>
+</div>
+
+
+<br>
+<br>
+
+<hr>
+
+<div id="outputdiv">
+    <h3> 
+        Sentiment is: 
+    </h3>
+
+</div>
+
+
+<div id="sentimentResult"> 
+  
+</div>
+
+
+
+
+
+<style>
+    hr{
+        color: black;
+        background-color: black;
+        border: 1px solid black;
+    }
+
+    h1{
+        text-align: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-decoration: solid underline;
+    }
+    body{
+        background: linear-gradient(to right, #8360c3, #2ebf91)
+    }
+    #inputdiv{
+        display: flex;
+        justify-content: center;
+        align-items: center; 
+        margin-top: 80px;
+    }
+    button:hover{
+        box-shadow: 2px 3px 2px;
+        color: #001d3d;
+        transform: translateY(-2px);
+    }
+    button{
+        height: 75px;
+        width: 150px;
+        font-size: medium;
+        font-weight: bold;
+    }
+    button:hover{
+        cursor: pointer;
+    }
+    
+    #buttondiv{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 2%;
+    }
+
+    #sentimentResult{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 23px;
+        font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+    }
+    textarea{
+        font-size: 18px;
+    }
+    #outputdiv{
+        margin-left: 650px;
+        margin-top: 70px;
+        font-size: 20px;
+        font-family: 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+    }
+
+
+
+</style>
+
+
+    
+</body>
+</html>

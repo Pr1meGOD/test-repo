@@ -102,7 +102,7 @@
 
 
 <script>
-   // Add event listener to the Analyze button
+// Add event listener to the Analyze button
 document.getElementById('analyzeButton').addEventListener('click', async () => {
     const textareaValue = document.querySelector('textarea').value;
 
@@ -117,11 +117,34 @@ document.getElementById('analyzeButton').addEventListener('click', async () => {
 
         const result = await response.json();
 
-        if (result && result.sentiment) {
-            // Update the headingdiv with the sentiment result
-            document.getElementById('headingdiv').innerHTML = `<h3>Sentiment is: ${result.sentiment}</h3>`;
+        if (result && result.sentiment && result.targetElementId) {
+            // Determine the color based on sentiment and update the specified HTML element
+            let color;
+            switch (result.sentiment) {
+                case 'POSITIVE':
+                    color = 'green';
+                    break;
+                case 'NEUTRAL':
+                    color = 'yellow';
+                    break;
+                case 'NEGATIVE':
+                    color = 'red';
+                    break;
+                case 'MIXED':
+                    color = 'orange';
+                    break;
+                default:
+                    color = 'black'; // Default color if sentiment is not recognized
+            }
+
+            const targetElement = document.getElementById(result.targetElementId);
+            if (targetElement) {
+                targetElement.innerHTML = `<h2 style="color: ${color};">${result.sentiment}!</h2>`;
+            } else {
+                console.error('Target HTML element not found:', result.targetElementId);
+            }
         } else {
-            console.error('Sentiment not found in API response:', result);
+            console.error('Invalid API response:', result);
         }
     } catch (error) {
         console.error('Error sending API request:', error);

@@ -108,7 +108,7 @@ document.getElementById('analyzeButton').addEventListener('click', async () => {
     const textareaValue = document.querySelector('textarea').value;
 
     try {
-        const response = await fetch('YOUR_API_GATEWAY_URL', {
+        const response = await fetch('https://fy7ike3m1h.execute-api.us-east-1.amazonaws.com/ffff', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -122,27 +122,32 @@ document.getElementById('analyzeButton').addEventListener('click', async () => {
 
         const result = await response.json();
 
-        let color;
+        let color, sentimentText;
         switch (result.sentiment) {
             case 'POSITIVE':
                 color = 'green';
-                break;
-            case 'NEUTRAL':
-                color = 'yellow';
+                sentimentText = 'Positive';
                 break;
             case 'NEGATIVE':
                 color = 'red';
+                sentimentText = 'Negative';
                 break;
             case 'MIXED':
                 color = 'orange';
+                sentimentText = 'Mixed';
+                break;
+            case 'NEUTRAL':
+                color = 'yellow';
+                sentimentText = 'Neutral';
                 break;
             default:
                 color = 'black'; // Default color if sentiment is not recognized
+                sentimentText = 'Unknown';
         }
 
         const sentimentElement = document.getElementById('headingdiv');
         if (sentimentElement) {
-            sentimentElement.innerHTML = `<h3 style="color: ${color};">Sentiment is: ${result.sentiment}</h3>`;
+            sentimentElement.innerHTML = `<h3 style="color: ${color};">Sentiment is: ${sentimentText}</h3>`;
         } else {
             console.error('Target HTML element not found:', 'headingdiv');
         }

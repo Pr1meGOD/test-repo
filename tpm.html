@@ -148,9 +148,6 @@ document.getElementById('analyzeButton').addEventListener('click', async () => {
                     sentimentDisplay = `<p style="color: black;">Unknown sentiment: ${result.sentiment}</p>`;
             }
             sentimentElement.innerHTML = sentimentDisplay;
-
-            // Append the sentiment to the body for visibility
-            document.body.innerHTML += sentimentDisplay;
         } else {
             console.error('Target HTML element not found:', 'headingdiv');
         }

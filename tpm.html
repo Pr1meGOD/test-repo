@@ -103,7 +103,7 @@
 
 <script>
 
-// Add event listener to the Analyze button
+// Frontend JavaScript code
 document.getElementById('analyzeButton').addEventListener('click', async () => {
     const textareaValue = document.querySelector('textarea').value;
 
@@ -128,7 +128,24 @@ document.getElementById('analyzeButton').addEventListener('click', async () => {
         console.log('Sentiment Element:', sentimentElement); // Log the sentiment element
 
         if (sentimentElement) {
-            sentimentElement.innerHTML = `<h3 style="color: ${getColor(result.sentiment)};">Sentiment is: ${result.sentiment}</h3>`;
+            let sentimentDisplay;
+            switch (result.sentiment.trim().toUpperCase()) {
+                case 'POSITIVE':
+                    sentimentDisplay = `<h3 style="color: green;">Sentiment is: ${result.sentiment}!</h3>`;
+                    break;
+                case 'NEUTRAL':
+                    sentimentDisplay = `<h3 style="color: yellow;">Sentiment is: ${result.sentiment}</h3>`;
+                    break;
+                case 'NEGATIVE':
+                    sentimentDisplay = `<h3 style="color: red;">Sentiment is: ${result.sentiment}!</h3>`;
+                    break;
+                case 'MIXED':
+                    sentimentDisplay = `<h3 style="color: orange;">Sentiment is: ${result.sentiment}!</h3>`;
+                    break;
+                default:
+                    sentimentDisplay = `<h3 style="color: black;">Unknown sentiment: ${result.sentiment}</h3>`;
+            }
+            sentimentElement.innerHTML = sentimentDisplay;
         } else {
             console.error('Target HTML element not found:', 'headingdiv');
         }
@@ -137,20 +154,6 @@ document.getElementById('analyzeButton').addEventListener('click', async () => {
     }
 });
 
-function getColor(sentiment) {
-    switch (sentiment.trim().toUpperCase()) {
-        case 'POSITIVE':
-            return 'green';
-        case 'NEGATIVE':
-            return 'red';
-        case 'MIXED':
-            return 'orange';
-        case 'NEUTRAL':
-            return 'yellow';
-        default:
-            return 'black'; // Default color if sentiment is not recognized
-    }
-}
 
 
 </script>

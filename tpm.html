@@ -108,7 +108,7 @@ document.getElementById('analyzeButton').addEventListener('click', async () => {
     const textareaValue = document.querySelector('textarea').value;
 
     try {
-        const response = await fetch('https://fy7ike3m1h.execute-api.us-east-1.amazonaws.com/ffff', {
+        const response = await fetch('YOUR_API_GATEWAY_URL', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -122,40 +122,33 @@ document.getElementById('analyzeButton').addEventListener('click', async () => {
 
         const result = await response.json();
 
-        if (result && result.sentiment) {
-            // Determine the color based on sentiment and update the specified HTML element
-            let color;
-            switch (result.sentiment) {
-                case 'POSITIVE':
-                    color = 'green';
-                    break;
-                case 'NEUTRAL':
-                    color = 'yellow';
-                    break;
-                case 'NEGATIVE':
-                    color = 'red';
-                    break;
-                case 'MIXED':
-                    color = 'orange';
-                    break;
-                default:
-                    color = 'black'; // Default color if sentiment is not recognized
-            }
-
-            const targetElement = document.getElementById('headingdiv');
-            if (targetElement) {
-                targetElement.innerHTML = `<h2 style="color: ${color};">${result.sentiment}!</h2>`;
-            } else {
-                console.error('Target HTML element not found:', 'headingdiv');
-            }
+        const sentimentElement = document.getElementById('sentiment');
+        if (sentimentElement) {
+            sentimentElement.innerText = result.sentiment || 'Sentiment not detected';
+            sentimentElement.style.color = getColorForSentiment(result.sentiment);
         } else {
-            console.error('Invalid API response:', result);
+            console.error('Target HTML element not found:', 'sentiment');
         }
     } catch (error) {
         console.error('Error sending/receiving API request:', error);
     }
 });
 
+// Function to determine color based on sentiment
+function getColorForSentiment(sentiment) {
+    switch (sentiment) {
+        case 'POSITIVE':
+            return 'green';
+        case 'NEUTRAL':
+            return 'yellow';
+        case 'NEGATIVE':
+            return 'red';
+        case 'MIXED':
+            return 'orange';
+        default:
+            return 'black'; // Default color if sentiment is not recognized
+    }
+}
 
 </script>
     

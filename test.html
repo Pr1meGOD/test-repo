@@ -23,7 +23,22 @@
         });
 
         const data = await response.json();
-        document.getElementById('sentimentResult').innerText = `Sentiment: ${data.sentiment}`;
+        const sentiment = data.sentiment;
+
+        // Update sentiment result based on received sentiment
+        const sentimentResult = document.getElementById('sentimentResult');
+        sentimentResult.innerText = `Sentiment: ${sentiment}`;
+
+        // Update style based on sentiment
+        if (sentiment === 'POSITIVE') {
+          sentimentResult.style.color = 'green';
+        } else if (sentiment === 'NEUTRAL') {
+          sentimentResult.style.color = 'yellow';
+        } else if (sentiment === 'NEGATIVE') {
+          sentimentResult.style.color = 'red';
+        } else if (sentiment === 'MIXED') {
+          sentimentResult.style.color = 'orange';
+        }
       } catch (error) {
         console.error('Error', error);
         document.getElementById('sentimentResult').innerText = 'Error performing sentiment analysis.';
@@ -66,7 +81,7 @@
 <hr>
 
 <div id="outputdiv">
-    <h3> 
+    <h3 id="sentimentDisplay"> 
         Sentiment is: 
     </h3>
 

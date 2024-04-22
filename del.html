@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@600&display=swap" rel="stylesheet">
+    <title>Sentiment Analysis</title>
+</head>
+<body>
+    <h1>
+        SENTIMENT ANALYSIS
+    </h1>
+
+
+<div id="inputdiv">
+ <textarea id="inputText" cols="150" rows="20"></textarea>
+</div>
+
+
+
+
+<div id="buttondiv">
+<button onclick="performSentimentAnalysis()">
+    Analyze 
+ </button>
+</div>
+
+
+<br>
+<br>
+
+<hr>
+
+
+<div id="headingdiv">
+    <h3 id="sentimentDisplay">
+        Sentiment is: 
+    </h3>
+    
+</div>
+
+
+
+<style>
+    hr{
+        color: black;
+        background-color: black;
+        border: 1px solid black;
+    }
+
+    h1{
+        text-align: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-decoration: solid underline;
+    }
+    body{
+        background: linear-gradient(to right, #8360c3, #2ebf91)
+    }
+    #inputdiv{
+        display: flex;
+        justify-content: center;
+        align-items: center; 
+        margin-top: 80px;
+    }
+    button:hover{
+        box-shadow: 2px 3px 2px;
+        color: #001d3d;
+        transform: translateY(-2px);
+    }
+    button{
+        height: 75px;
+        width: 150px;
+        font-size: medium;
+        font-weight: bold;
+    }
+    button:hover{
+        cursor: pointer;
+    }
+    
+    #buttondiv{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 2%;
+    }
+
+    #headingdiv{
+        margin-left: 650px;
+        margin-top: 70px;
+        font-size: 20px;
+        font-family: 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+    }
+    textarea{
+        font-size: 18px;
+    }
+
+    #sentimentDisplay {
+        margin-left: 20px;
+    }
+
+</style>
+
+<script>
+    async function performSentimentAnalysis() {
+        const text = document.getElementById('inputText').value;
+
+        try {
+            const response = await fetch('YOUR_API_ENDPOINT', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*' // Adjust allowed origin if needed
+                },
+                body: JSON.stringify({ text: text })
+            });
+
+            const data = await response.json();
+            displaySentiment(data.sentiment);
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('sentimentDisplay').innerText = 'Error performing sentiment analysis.';
+        }
+    }
+
+    function displaySentiment(sentiment) {
+        const sentimentDisplay = document.getElementById('sentimentDisplay');
+        sentimentDisplay.innerHTML = ''; // Clear previous content
+
+        const h3 = document.createElement('h3');
+        h3.textContent = `Sentiment is: ${sentiment}!`;
+        
+        // Apply color based on sentiment
+        if (sentiment === 'POSITIVE') {
+            h3.style.color = 'green';
+        } else if (sentiment === 'NEUTRAL') {
+            h3.style.color = 'yellow';
+        } else if (sentiment === 'NEGATIVE') {
+            h3.style.color = 'red';
+        } else if (sentiment === 'MIXED') {
+            h3.style.color = 'orange';
+        }
+
+        sentimentDisplay.appendChild(h3);
+    }
+</script>
+    
+</body>
+</html>

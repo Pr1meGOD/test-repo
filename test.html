@@ -27,13 +27,13 @@
 
     // Update style based on sentiment
     const sentimentResult = document.getElementById('sentimentResult');
-    if (sentiment === POSITIVE) {
+    if (sentiment === `POSITIVE`) {
       sentimentResult.style.color = 'green';
-    } else if (sentiment === NEUTRAL) {
+    } else if (sentiment === `NEUTRAL`) {
       sentimentResult.style.color = 'yellow';
-    } else if (sentiment === NEGATIVE) {
+    } else if (sentiment === `NEGATIVE`) {
       sentimentResult.style.color = 'red';
-    } else if (sentiment === MIXED) {
+    } else if (sentiment === `MIXED`) {
       sentimentResult.style.color = 'orange';
     }
 

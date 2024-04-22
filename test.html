@@ -8,42 +8,45 @@
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@600&display=swap" rel="stylesheet">
 
     <script>
-    async function performSentimentAnalysis() {
-      const text = document.getElementById('inputText').value;
+        async function performSentimentAnalysis() {
+  const text = document.getElementById('inputText').value;
 
-      try {
-        const response = await fetch("https://uzigg3kz7g.execute-api.us-east-1.amazonaws.com/test1", {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8',
-            'Access-Control-Allow-Headers': '*',
-            'Access-Control-Allow-Origin': '*' // Adjust allowed origin if needed
-          },
-          body: JSON.stringify({ text: text })
-        });
+  try {
+    const response = await fetch("https://uzigg3kz7g.execute-api.us-east-1.amazonaws.com/test1", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Allow-Origin': '*' // Adjust allowed origin if needed
+      },
+      body: JSON.stringify({ text: text })
+    });
 
-        const data = await response.json();
-        const sentiment = data.sentiment;
+    const data = await response.json();
+    const sentiment = data.sentiment;
 
-        // Update sentiment result based on received sentiment
-        const sentimentResult = document.getElementById('sentimentResult');
-        sentimentResult.innerText = `Sentiment: ${sentiment}`;
-
-        // Update style based on sentiment
-        if (sentiment === 'POSITIVE') {
-          sentimentResult.style.color = 'green';
-        } else if (sentiment === 'NEUTRAL') {
-          sentimentResult.style.color = 'yellow';
-        } else if (sentiment === 'NEGATIVE') {
-          sentimentResult.style.color = 'red';
-        } else if (sentiment === 'MIXED') {
-          sentimentResult.style.color = 'orange';
-        }
-      } catch (error) {
-        console.error('Error', error);
-        document.getElementById('sentimentResult').innerText = 'Error performing sentiment analysis.';
-      }
+    // Update style based on sentiment
+    const sentimentResult = document.getElementById('sentimentResult');
+    if (sentiment === 'POSITIVE') {
+      sentimentResult.style.color = 'green';
+    } else if (sentiment === 'NEUTRAL') {
+      sentimentResult.style.color = 'yellow';
+    } else if (sentiment === 'NEGATIVE') {
+      sentimentResult.style.color = 'red';
+    } else if (sentiment === 'MIXED') {
+      sentimentResult.style.color = 'orange';
     }
+
+    // Update sentiment result after styling
+    sentimentResult.innerText = `Sentiment: ${sentiment}`;
+  } catch (error) {
+    console.error('Error', error);
+    document.getElementById('sentimentResult').innerText = 'Error performing sentiment analysis.';
+  }
+}
+
+
+
   </script>
 </body>
 </html>

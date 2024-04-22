@@ -8,31 +8,30 @@
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@600&display=swap" rel="stylesheet">
 
     <script>
-        async function performSentimentAnalysis(){
-            const text = document.getElementById('inputText').value;
+    async function performSentimentAnalysis() {
+      const text = document.getElementById('inputText').value;
 
-            try{
-                const response = await fetch('https://dhjoure0fa.execute-api.us-east-1.amazonaws.com/dev_stage/', {
-                    mode:"cors",
-                    method:'POST',
-                    body:JSON.stringify({ Text:text }),
-                    headers: {
-                        'Content-Type' : 'application/json',
-                        'Access-Control-Allow-Origin': 'http://testbucket20april.s3-website-us-east-1.amazonaws.com',
-                        'Access-Control-Allow-Headers': 'Content-Type',
-                        'Access-Control-Allow-Methods': 'POST, OPTIONS'
-                    }
-                });
+      try {
+        const response = await fetch('YOUR_API_ENDPOINT', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*' // Adjust allowed origin if needed
+          },
+          body: JSON.stringify({ text: text })
+        });
 
-                const data = await response.json();
-                document.getElementById('sentimentResult').innerText = 'Sentiment: ${data.sentiment}' ;
-            
-            } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('sentimentResult').innerText = 'Error performing Sentiment Analysis.';
-            }
-        }
-       
+        const data = await response.json();
+        document.getElementById('sentimentResult').innerText = `Sentiment: ${data.sentiment}`;
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('sentimentResult').innerText = 'Error performing sentiment analysis.';
+      }
+    }
+  </script>
+</body>
+</html>
+
     </script>
 
     <title>Sentiment Analysis</title>

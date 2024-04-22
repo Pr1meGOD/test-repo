@@ -43,6 +43,7 @@
       }
     }
 
+
   </script>
 </body>
 </html>
@@ -80,17 +81,15 @@
 <hr>
 
 <div id="outputdiv">
-    <h3> 
+    <h3 id="sentimentDisplay"> 
         Sentiment is: 
     </h3>
 
 </div>
 
 
-<div> 
-  <h3 id="sentimentResult" >
-
-  </h3>
+<div id="sentimentResult"> 
+  
 </div>
 
 
@@ -140,7 +139,7 @@
         margin: 2%;
     }
 
-    #sentimentDisplay{
+    #sentimentResult{
         display: flex;
         align-items: center;
         justify-content: center;
@@ -156,9 +155,6 @@
         margin-top: 70px;
         font-size: 20px;
         font-family: 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
-    }
-    #sentimentResult{
-        margin-left: 20px;
     }
 
 

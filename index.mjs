@@ -10,7 +10,7 @@ export const handler = async (event, context) => {
         statusCode: 200,
         headers: {
             'Access-Control-Allow-Origin': '*', 
-            'Access-Control-Allow-Headers': '*',  // Allow any headers
+            'Access-Control-Allow-Headers': '*',  
             'Access-Control-Allow-Methods': 'POST'
         },
         body: JSON.stringify({ sentiment: sentimentResult })
@@ -32,3 +32,28 @@ async function detectSentiment(text) {
         throw new Error('Error detecting sentiment.');
     }
 }
+
+// Add event listener to the Analyze button
+document.querySelector('button').addEventListener('click', async () => {
+    const textareaValue = document.querySelector('textarea').value;
+
+    try {
+        const response = await fetch('https://fy7ike3m1h.execute-api.us-east-1.amazonaws.com/ffff', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*', 
+                'Access-Control-Allow-Headers': '*',  
+                'Access-Control-Allow-Methods': 'POST'
+            },
+            body: JSON.stringify({ text: textareaValue })
+        });
+
+        const result = await response.json();
+
+        // Update the headingdiv with the sentiment result
+        document.getElementById('headingdiv').innerHTML = `<h3>Sentiment is: ${result.sentiment}</h3>`;
+    } catch (error) {
+        console.error('Error sending API request:', error);
+    }
+});

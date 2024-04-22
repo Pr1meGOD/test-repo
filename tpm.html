@@ -143,8 +143,8 @@ document.addEventListener('DOMContentLoaded', () => {
             let sentimentDisplay;
             if (result.sentiment) {
                 switch (result.sentiment.trim().toUpperCase()) {
-                    case "POSITIVE":
-                        sentimentDisplay = `<p style="color: green;">Sentiment is: ${sentiment}!</p>`;
+                    case '':
+                        sentimentDisplay = `<p style="color: green;">Sentiment is: ${result.sentiment}!</p>`;
                         break;
                     case 'NEUTRAL':
                         sentimentDisplay = `<p style="color: yellow;">Sentiment is: ${result.sentiment}</p>`;

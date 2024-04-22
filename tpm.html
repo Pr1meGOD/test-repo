@@ -124,32 +124,9 @@ document.getElementById('analyzeButton').addEventListener('click', async () => {
 
         console.log('API Response:', result); // Log the API response
 
-        let color, sentimentText;
-        switch (result.sentiment.trim().toUpperCase()) { // Trim and convert to uppercase for comparison
-            case 'POSITIVE':
-                color = 'green';
-                sentimentText = 'Positive';
-                break;
-            case 'NEGATIVE':
-                color = 'red';
-                sentimentText = 'Negative';
-                break;
-            case 'MIXED':
-                color = 'orange';
-                sentimentText = 'Mixed';
-                break;
-            case 'NEUTRAL':
-                color = 'yellow';
-                sentimentText = 'Neutral';
-                break;
-            default:
-                color = 'black'; // Default color if sentiment is not recognized
-                sentimentText = 'Unknown';
-        }
-
         const sentimentElement = document.getElementById('headingdiv');
         if (sentimentElement) {
-            sentimentElement.innerHTML = `<h3 style="color: ${color};">Sentiment is: ${sentimentText}</h3>`;
+            sentimentElement.innerHTML = `<h3 style="color: ${getColor(result.sentiment)};">Sentiment is: ${result.sentiment}</h3>`;
         } else {
             console.error('Target HTML element not found:', 'headingdiv');
         }
@@ -157,6 +134,21 @@ document.getElementById('analyzeButton').addEventListener('click', async () => {
         console.error('Error sending/receiving API request:', error);
     }
 });
+
+function getColor(sentiment) {
+    switch (sentiment.trim().toUpperCase()) {
+        case 'POSITIVE':
+            return 'green';
+        case 'NEGATIVE':
+            return 'red';
+        case 'MIXED':
+            return 'orange';
+        case 'NEUTRAL':
+            return 'yellow';
+        default:
+            return 'black'; // Default color if sentiment is not recognized
+    }
+}
 
 
 

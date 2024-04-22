@@ -17,7 +17,7 @@
     <div id="sentimentResult"></div>
 
     <script>
-       async function performSentimentAnalysis() {
+      async function performSentimentAnalysis() {
     const text = document.getElementById('inputText').value.trim();
 
     if (text === '') {
@@ -29,9 +29,7 @@
         const response = await fetch('https://uzigg3kz7g.execute-api.us-east-1.amazonaws.com/test1', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json; charset=utf-8',
-                'Access-Control-Allow-Headers': '*',
-                'Access-Control-Allow-Origin': '*'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({ text: text })
         });
@@ -40,10 +38,10 @@
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        const data = await response.json();
+        const responseData = await response.json();
 
-        if (data && data.sentiment) {
-            const sentiment = data.sentiment;
+        if (responseData && responseData.sentiment) {
+            const sentiment = responseData.sentiment;
             // Update sentiment result and style based on sentiment value
             const sentimentResultDiv = document.getElementById('sentimentResult');
             sentimentResultDiv.innerHTML = `<strong>Sentiment:</strong> ${sentiment}`;
@@ -56,6 +54,7 @@
         sentimentResultDiv.innerText = 'Error performing sentiment analysis.';
     }
 }
+
 
     </script>
 </body>

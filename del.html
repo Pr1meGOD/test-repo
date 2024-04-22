@@ -3,171 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@600&display=swap" rel="stylesheet">
-
-    <!-- Include the AWS SDK for JavaScript -->
-    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1104.0.min.js"></script>
-
-    <script>
-    // Initialize AWS SDK
-    AWS.config.update({ region: 'us-east-1' });
-    const comprehend = new AWS.Comprehend();
-
-    async function detectSentiment(text) {
-      const params = {
-        LanguageCode: 'en',
-        Text: text
-      };
-
-      return new Promise((resolve, reject) => {
-        comprehend.detectSentiment(params, (err, data) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(data);
-          }
-        });
-      });
-    }
-
-    async function performSentimentAnalysis() {
-      const text = document.getElementById('inputText').value;
-
-      try {
-        // Call detectSentiment method to get sentiment
-        const data = await detectSentiment(text);
-        const sentiment = data.Sentiment;
-
-        // Update sentiment result and style based on sentiment value
-        const sentimentResult = document.getElementById('sentimentResult');
-        sentimentResult.innerText = `Sentiment: ${sentiment}`;
-        if (sentiment === 'POSITIVE') {
-          sentimentResult.style.color = 'green';
-        } else if (sentiment === 'NEUTRAL') {
-          sentimentResult.style.color = 'yellow';
-        } else if (sentiment === 'NEGATIVE') {
-          sentimentResult.style.color = 'red';
-        } else if (sentiment === 'MIXED') {
-          sentimentResult.style.color = 'orange';
-        }
-      } catch (error) {
-        console.error('Error', error);
-        document.getElementById('sentimentResult').innerText = 'Error performing sentiment analysis.';
-      }
-    }
-  </script>
-
     <title>Sentiment Analysis</title>
 </head>
 <body>
-    <h1>
-        <span>
-            SENTIMENT ANALYSIS
-        </span>
-        
-    </h1>
+    <h1>Sentiment Analysis</h1>
 
+    <div>
+        <label for="inputText">Enter Text:</label><br>
+        <textarea id="inputText" rows="5" cols="50"></textarea><br>
+        <button onclick="performSentimentAnalysis()">Analyze Sentiment</button>
+    </div>
 
-<div id="inputdiv">
- <textarea cols="120" rows="17" id="inputText"> </textarea>
-</div>
+    <div id="sentimentResult"></div>
 
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1104.0.min.js"></script>
+    <script>
+        // Initialize AWS SDK
+        AWS.config.update({ region: 'us-east-1' });
+        const comprehend = new AWS.Comprehend();
 
+        async function detectSentiment(text) {
+            const params = {
+                LanguageCode: 'en',
+                Text: text
+            };
 
+            return new Promise((resolve, reject) => {
+                comprehend.detectSentiment(params, (err, data) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(data);
+                    }
+                });
+            });
+        }
 
-<div id="buttondiv" >
-<button onclick="performSentimentAnalysis()">
-    Analyze 
- </button>
-</div>
+        async function performSentimentAnalysis() {
+            const text = document.getElementById('inputText').value.trim();
 
+            if (text === '') {
+                alert('Please enter some text.');
+                return;
+            }
 
-<br>
-<br>
+            try {
+                // Call detectSentiment method to get sentiment
+                const data = await detectSentiment(text);
+                const sentiment = data.Sentiment;
 
-<hr>
-
-<div id="outputdiv">
-    <h3 id="sentimentDisplay"> 
-        Sentiment is: 
-    </h3>
-
-</div>
-
-
-<div id="sentimentResult"> 
-  
-</div>
-
-
-<style>
-    hr{
-        color: black;
-        background-color: black;
-        border: 1px solid black;
-    }
-
-    h1{
-        text-align: center;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        text-decoration: solid underline;
-    }
-    body{
-        background: linear-gradient(to right, #8360c3, #2ebf91)
-    }
-    #inputdiv{
-        display: flex;
-        justify-content: center;
-        align-items: center; 
-        margin-top: 80px;
-    }
-    button:hover{
-        box-shadow: 2px 3px 2px;
-        color: #001d3d;
-        transform: translateY(-2px);
-    }
-    button{
-        height: 75px;
-        width: 150px;
-        font-size: medium;
-        font-weight: bold;
-    }
-    button:hover{
-        cursor: pointer;
-    }
-    
-    #buttondiv{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 2%;
-    }
-
-    #sentimentResult{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        font-size: 23px;
-        font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
-    }
-    textarea{
-        font-size: 18px;
-    }
-    #outputdiv{
-        margin-left: 650px;
-        margin-top: 70px;
-        font-size: 20px;
-        font-family: 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
-    }
-
-
-
-</style>
-
-
-    
+                // Update sentiment result and style based on sentiment value
+                const sentimentResultDiv = document.getElementById('sentimentResult');
+                sentimentResultDiv.innerHTML = `<strong>Sentiment:</strong> ${sentiment}`;
+            } catch (error) {
+                console.error('Error', error);
+                const sentimentResultDiv = document.getElementById('sentimentResult');
+                sentimentResultDiv.innerText = 'Error performing sentiment analysis.';
+            }
+        }
+    </script>
 </body>
 </html>

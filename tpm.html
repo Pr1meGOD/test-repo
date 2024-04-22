@@ -125,6 +125,8 @@ document.getElementById('analyzeButton').addEventListener('click', async () => {
         console.log('API Response:', result); // Log the API response
 
         const sentimentElement = document.getElementById('headingdiv');
+        console.log('Sentiment Element:', sentimentElement); // Log the sentiment element
+
         if (sentimentElement) {
             sentimentElement.innerHTML = `<h3 style="color: ${getColor(result.sentiment)};">Sentiment is: ${result.sentiment}</h3>`;
         } else {

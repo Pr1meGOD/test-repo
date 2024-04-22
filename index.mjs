@@ -32,4 +32,3 @@ async function detectSentiment(text) {
         throw new Error('Error detecting sentiment.');
     }
 }
-

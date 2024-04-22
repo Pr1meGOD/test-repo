@@ -125,7 +125,7 @@ document.getElementById('analyzeButton').addEventListener('click', async () => {
         console.log('API Response:', result); // Log the API response
 
         let color, sentimentText;
-        switch (result.sentiment) {
+        switch (result.sentiment.trim().toUpperCase()) { // Trim and convert to uppercase for comparison
             case 'POSITIVE':
                 color = 'green';
                 sentimentText = 'Positive';
@@ -157,6 +157,7 @@ document.getElementById('analyzeButton').addEventListener('click', async () => {
         console.error('Error sending/receiving API request:', error);
     }
 });
+
 
 
 </script>

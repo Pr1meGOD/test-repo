@@ -122,6 +122,8 @@ document.getElementById('analyzeButton').addEventListener('click', async () => {
 
         const result = await response.json();
 
+        console.log('API Response:', result); // Log the API response
+
         let color, sentimentText;
         switch (result.sentiment) {
             case 'POSITIVE':
@@ -155,7 +157,6 @@ document.getElementById('analyzeButton').addEventListener('click', async () => {
         console.error('Error sending/receiving API request:', error);
     }
 });
-
 
 
 </script>

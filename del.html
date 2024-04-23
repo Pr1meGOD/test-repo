@@ -6,58 +6,63 @@
     <title>Sentiment Analysis</title>
 </head>
 <body>
-    <h1>Sentiment Analysis</h1>
+    <h1>SENTIMENT ANALYSIS</h1>
 
-    <div>
-        <label for="inputText">Enter Text:</label><br>
-        <textarea id="inputText" rows="5" cols="50"></textarea><br>
-        <button onclick="performSentimentAnalysis()">Analyze Sentiment</button>
+    <div id="inputdiv">
+        <textarea id="inputText" cols="50" rows="10"></textarea>
     </div>
 
-    <div id="sentimentResult"></div>
+    <div id="buttondiv">
+        <button id="analyzeButton">Analyze</button>
+    </div>
+
+    <hr>
+
+    <div id="headingdiv">
+        <h3 id="sentimentDisplay"></h3>
+    </div>
 
     <script>
-      async function performSentimentAnalysis() {
-    const text = document.getElementById('inputText').value.trim();
+        document.getElementById('analyzeButton').addEventListener('click', async () => {
+            const textarea = document.getElementById('inputText');
+            const sentimentDisplay = document.getElementById('sentimentDisplay');
 
-    if (text === '') {
-        alert('Please enter some text.');
-        return;
-    }
+            if (!textarea || !sentimentDisplay) {
+                console.error('Textarea or Sentiment Display Element not found.');
+                return;
+            }
 
-    try {
-        const response = await fetch('https://uzigg3kz7g.execute-api.us-east-1.amazonaws.com/test1', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json; charset=utf-8',
-                'Access-Control-Allow-Headers': '*',
-                'Access-Control-Allow-Origin': '*'
-            },
-            body: JSON.stringify({ text: text })
+            const textareaValue = textarea.value || '';
+
+            if (textareaValue === '') {
+                console.error('Textarea value is empty.');
+                return;
+            }
+
+            try {
+                const response = await fetch('https://fy7ike3m1h.execute-api.us-east-1.amazonaws.com/ffff', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ text: textareaValue })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                console.log('API Response:', result);
+
+                const body = JSON.parse(result.body);
+                const sentiment = body.sentiment || 'Unknown'; // Get the sentiment or set to 'Unknown' if not present
+                sentimentDisplay.textContent = `Sentiment: ${sentiment}`;
+            } catch (error) {
+                console.error('Error sending/receiving API request:', error);
+            }
         });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const responseData = await response.json();
-
-        if (responseData && responseData.sentiment) {
-            const sentiment = responseData.sentiment;
-            // Update sentiment result and style based on sentiment value
-            const sentimentResultDiv = document.getElementById('sentimentResult');
-            sentimentResultDiv.innerHTML = `<strong>Sentiment:</strong> ${sentiment}`;
-        } else {
-            throw new Error('Sentiment not found in API response.');
-        }
-    } catch (error) {
-        console.error('Error performing sentiment analysis:', error);
-        const sentimentResultDiv = document.getElementById('sentimentResult');
-        sentimentResultDiv.innerText = 'Error performing sentiment analysis.';
-    }
-}
-
-
     </script>
 </body>
 </html>

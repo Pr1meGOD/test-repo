@@ -13,169 +13,121 @@
         SENTIMENT ANALYSIS
     </h1>
 
+    <div id="inputdiv">
+        <textarea cols="150" rows="20" id="inputText"> </textarea>
+    </div>
 
-<div id="inputdiv">
- <textarea cols="150" rows="20" id="inputText"> </textarea>
-</div>
+    <div id="buttondiv">
+        <button id="analyzeButton">
+            Analyze 
+        </button>
+    </div>
 
+    <br>
+    <br>
 
+    <hr>
 
+    <div id="headingdiv">
+        <h3 id="sentimentDisplay">
+        </h3>
+    </div>
 
-<div id="buttondiv">
-<button id="analyzeButton">
-    Analyze 
- </button>
-</div>
-
-
-<br>
-<br>
-
-<hr>
-
-
-<div id="endingdiv">
-    <h3>
-        Sentiment is: 
-    </h3>
-    <p id="headingdiv">
-     
-    </p>
-    
-</div>
-
-
-
-<style>
-    hr{
-        color: black;
-        background-color: black;
-        border: 1px solid black;
-    }
-
-    h1{
-        text-align: center;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        text-decoration: solid underline;
-    }
-    body{
-        background: linear-gradient(to right, #8360c3, #2ebf91)
-    }
-    #inputdiv{
-        display: flex;
-        justify-content: center;
-        align-items: center; 
-        margin-top: 80px;
-    }
-    button:hover{
-        box-shadow: 2px 3px 2px;
-        color: #001d3d;
-        transform: translateY(-2px);
-    }
-    button{
-        height: 75px;
-        width: 150px;
-        font-size: medium;
-        font-weight: bold;
-    }
-    button:hover{
-        cursor: pointer;
-    }
-    
-    #buttondiv{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 2%;
-    }
-
-    #endingdiv{
-        margin-left: 650px;
-        margin-top: 50px;
-        font-size: 20px;
-        font-family: 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
-    }
-    textarea{
-        font-size: 18px;
-    }
-
-
-
-</style>
-
-
-<script>
-
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('analyzeButton').addEventListener('click', async () => {
-        const textarea = document.getElementById('inputText');
-        const sentimentElement = document.getElementById('headingdiv');
-
-        if (!textarea || !sentimentElement) {
-            console.error('Textarea or Sentiment Element not found.');
-            return;
+    <style>
+        hr{
+            color: black;
+            background-color: black;
+            border: 1px solid black;
         }
 
-        const textareaValue = textarea.value || ''; // Get the textarea value, default to empty string if undefined
-
-        if (textareaValue === '') { // Check if the value is empty
-            console.error('Textarea value is empty.');
-            return;
+        h1{
+            text-align: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-decoration: solid underline;
+        }
+        body{
+            background: linear-gradient(to right, #8360c3, #2ebf91)
+        }
+        #inputdiv{
+            display: flex;
+            justify-content: center;
+            align-items: center; 
+            margin-top: 80px;
+        }
+        button:hover{
+            box-shadow: 2px 3px 2px;
+            color: #001d3d;
+            transform: translateY(-2px);
+        }
+        button{
+            height: 75px;
+            width: 150px;
+            font-size: medium;
+            font-weight: bold;
+        }
+        button:hover{
+            cursor: pointer;
         }
 
-        try {
-            const response = await fetch('https://fy7ike3m1h.execute-api.us-east-1.amazonaws.com/ffff', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ text: textareaValue })
-            });
+        #buttondiv{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 2%;
+        }
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+        #headingdiv{
+            margin-left: 650px;
+            margin-top: 50px;
+            font-size: 20px;
+            font-family: 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+        }
+        textarea{
+            font-size: 18px;
+        }
+    </style>
+
+    <script>
+        document.getElementById('analyzeButton').addEventListener('click', async () => {
+            const textarea = document.getElementById('inputText');
+            const sentimentDisplay = document.getElementById('sentimentDisplay');
+
+            if (!textarea || !sentimentDisplay) {
+                console.error('Textarea or Sentiment Display Element not found.');
+                return;
             }
 
-            const result = await response.json();
+            const textareaValue = textarea.value || '';
 
-            console.log('API Response:', result);
+            if (textareaValue === '') {
+                console.error('Textarea value is empty.');
+                return;
+            }
 
-            let sentimentDisplay;
-            if (result.sentiment) {
-                switch (result.sentiment.trim().toUpperCase()) {
-                    case '':
-                        sentimentDisplay = `<p style="color: green;">Sentiment is: ${result.sentiment}!</p>`;
-                        break;
-                    case 'NEUTRAL':
-                        sentimentDisplay = `<p style="color: yellow;">Sentiment is: ${result.sentiment}</p>`;
-                        break;
-                    case 'NEGATIVE':
-                        sentimentDisplay = `<p style="color: red;">Sentiment is: ${result.sentiment}!</p>`;
-                        break;
-                    case 'MIXED':
-                        sentimentDisplay = `<p style="color: orange;">Sentiment is: ${result.sentiment}!</p>`;
-                        break;
-                    default:
-                        sentimentDisplay = `<p style="color: black;">Unknown sentiment: ${result.sentiment}</p>`;
+            try {
+                const response = await fetch('https://fy7ike3m1h.execute-api.us-east-1.amazonaws.com/ffff', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ text: textareaValue })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-            } else {
-                sentimentDisplay = '<p style="color: black;">Sentiment not available.</p>';
+
+                const result = await response.json();
+
+                console.log('API Response:', result);
+
+                const body = JSON.parse(result.body);
+                const sentiment = body.sentiment || 'Unknown'; // Get the sentiment or set to 'Unknown' if not present
+                sentimentDisplay.textContent = `Sentiment: ${sentiment}`;
+            } catch (error) {
+                console.error('Error sending/receiving API request:', error);
             }
-
-            sentimentElement.innerHTML = sentimentDisplay;
-        } catch (error) {
-            console.error('Error sending/receiving API request:', error);
-        }
-    });
-});
-
-
-
-
-
-
-
-</script>
-    
+        });
+    </script>
 </body>
 </html>

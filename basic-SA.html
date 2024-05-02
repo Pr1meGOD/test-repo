@@ -24,7 +24,7 @@
     
 
     <div id="inputdiv">
-        <textarea cols="150" rows="20" id="inputText" placeholder="Enter some text:"> </textarea>
+    <textarea cols="150" rows="20" id="inputText" placeholder= " Enter some text:" wrap="physical"></textarea>
     </div>
 
     <div id="buttondiv">
@@ -129,18 +129,17 @@ a{
             background-color: white;
         }
         button:hover{
-            box-shadow: 2px 3px 2px;
-            color: #001d3d;
+            box-shadow: 2px 2px 2px;
             transform: translateY(-2px);
+            cursor: pointer;
+
         }
         button{
             height: 75px;
             width: 150px;
             font-size: medium;
             font-weight: bold;
-        }
-        button:hover{
-            cursor: pointer;
+            background: linear-gradient(to right, #E6DADA, #274046);
         }
 
         #buttondiv{
@@ -149,9 +148,12 @@ a{
             align-items: center;
             margin: 2%;
         }
+        #sentimentDisplay{
+            background-color: black;
+        }
 
         #headingdiv{
-            margin-left: 800px;
+            margin-left: 700px;
             margin-top: 50px;
             font-size: 20px;
             font-family: 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif

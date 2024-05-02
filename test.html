@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Real-Time News Sentiment Analysis</title>
+</head>
+<body>
+  <div id="news"></div>
+  <div id="sentiment"></div>
+
+  <script>
+    // Function to fetch news from Hindustan Times
+    async function fetchNews() {
+      try {
+        const response = await fetch('https://www.hindustantimes.com/india-news');
+        const html = await response.text();
+        // Parse HTML string into a DOM tree
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        // Extract news content
+        const newsTitles = Array.from(doc.querySelectorAll('.title')).map(title => title.textContent);
+        const newsContents = Array.from(doc.querySelectorAll('.description')).map(content => content.textContent);
+        // Combine news titles and contents into a single string
+        const newsText = newsTitles.join('\n') + '\n\n' + newsContents.join('\n\n');
+        return newsText;
+      } catch (error) {
+        console.error('Error fetching news:', error);
+        return null;
+      }
+    }
+
+    // Function to analyze sentiment using AWS Comprehend via API Gateway
+    async function analyzeSentiment(text) {
+      try {
+        const response = await fetch('https://xhkc56io19.execute-api.us-east-1.amazonaws.com/dev', {
+          method: 'POST',
+          body: JSON.stringify({ text }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        const data = await response.json();
+        return data.sentiment; // Assuming your Lambda function returns the sentiment
+      } catch (error) {
+        console.error('Error analyzing sentiment:', error);
+        return null;
+      }
+    }
+
+    // Function to update the webpage with news and sentiment
+    function updateWebpage(news, sentiment) {
+      // Implement logic to display news and sentiment on your webpage
+      const newsElement = document.getElementById('news');
+      const sentimentElement = document.getElementById('sentiment');
+      newsElement.innerText = news;
+      sentimentElement.innerText = 'Sentiment: ' + sentiment;
+    }
+
+    // Function to continuously fetch news and update the webpage
+    async function fetchAndDisplayNews() {
+      try {
+        const news = await fetchNews();
+        if (news) {
+          const sentiment = await analyzeSentiment(news);
+          updateWebpage(news, sentiment);
+        }
+      } catch (error) {
+        console.error('Error fetching and displaying news:', error);
+      } finally {
+        // Set a timeout to fetch news at regular intervals (e.g., every 5 seconds)
+        setTimeout(fetchAndDisplayNews, 5000);
+      }
+    }
+
+    // Call the fetch and display function to start real-time updates
+    fetchAndDisplayNews();
+  </script>
+</body>
+</html>

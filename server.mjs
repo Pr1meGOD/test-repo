@@ -1,6 +1,6 @@
-const express = require('express');
-const fetch = require('node-fetch');
-const cheerio = require('cheerio');
+import express from 'express';
+import fetch from 'node-fetch';
+import cheerio from 'cheerio';
 
 const app = express();
 const PORT = process.env.PORT || 3000;

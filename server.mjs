@@ -20,12 +20,16 @@ app.get('/api/headlines', async (req, res) => {
 
         // Extract headlines from the specific HTML structure
         const headlines = [];
-        $('h2.sc-4fedabc7-3').each((index, element) => {
+        $('h3').each((index, element) => { // Change selector to 'h3'
             const headline = $(element).text().trim();
             if (headline) {
                 headlines.push(headline);
             }
         });
+
+        if (headlines.length === 0) {
+            throw new Error('No headlines found'); // Throw error if no headlines are extracted
+        }
 
         res.json({ headlines });
     } catch (error) {

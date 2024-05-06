@@ -28,8 +28,8 @@
   </div>
 
   <script>
-     // Function to fetch news from Hindustan Times
-     async function fetchNews() {
+    // Function to fetch news from Hindustan Times
+    async function fetchNews() {
       try {
         const response = await fetch('https://www.hindustantimes.com/india-news');
         const html = await response.text();
@@ -69,9 +69,9 @@
     // Function to update the webpage with news and sentiment
     function updateWebpage(news, sentiment) {
       // Implement logic to display news and sentiment on your webpage
-      const newsElement = document.getElementById('news');
-      const sentimentElement = document.getElementById('sentiment');
-      newsElement.innerText = news;
+      const newsElement = document.getElementById('newsList');
+      const sentimentElement = document.getElementById('sentimentResult');
+      newsElement.innerHTML = '<li>' + news.replace(/\n/g, '</li><li>') + '</li>';
       sentimentElement.innerText = 'Sentiment: ' + sentiment;
     }
 
@@ -96,4 +96,3 @@
   </script>
 </body>
 </html>
-

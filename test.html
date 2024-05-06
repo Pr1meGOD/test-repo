@@ -27,9 +27,8 @@
     <p id="sentimentResult"></p>
   </div>
 
-  <script>
-
-
+<script>
+// Function to fetch news data from the server
 async function fetchNewsFromServer() {
     try {
         const response = await fetch('http://localhost:3000/api/news'); // Change the URL to match your backend route
@@ -40,7 +39,8 @@ async function fetchNewsFromServer() {
         const headlines = parseHTML(data);
         console.log(headlines); // Display extracted news headlines
         
-        // Example: displayNewsHeadlines(headlines);
+        // Display news headlines on the webpage
+        displayNewsHeadlines(headlines);
     } catch (error) {
         console.error('Error fetching news:', error);
     }
@@ -64,9 +64,19 @@ function parseHTML(html) {
     return newsTitles;
 }
 
+// Function to display news headlines on the webpage
+function displayNewsHeadlines(headlines) {
+    const newsList = document.getElementById('newsList');
+    headlines.forEach(title => {
+        const listItem = document.createElement('li');
+        listItem.textContent = title;
+        newsList.appendChild(listItem);
+    });
+}
 
 // Call the fetch function to fetch news headlines from your server
 fetchNewsFromServer();
+</script>
 
 
   </script>

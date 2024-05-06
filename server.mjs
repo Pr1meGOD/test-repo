@@ -1,26 +1,22 @@
-import express from 'express';
-import fetch from 'node-fetch';
-import cheerio from 'cheerio'; // Import Cheerio
+const express = require('express');
+const fetch = require('node-fetch');
+const cheerio = require('cheerio');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Route to fetch headlines from BBC News and serve them to the frontend
 app.get('/api/headlines', async (req, res) => {
     try {
-        const response = await fetch('https://www.bbc.co.uk/news');
+        const response = await fetch('https://www.bbc.com/news');
         if (!response.ok) {
             throw new Error('Failed to fetch news from BBC News');
         }
 
         const html = await response.text();
-
-        // Parse HTML using Cheerio
         const $ = cheerio.load(html);
 
-        // Extract headlines from the specific HTML structure
         const headlines = [];
-        $('h3').each((index, element) => { // Change selector to 'h3'
+        $('h3').each((index, element) => {
             const headline = $(element).text().trim();
             if (headline) {
                 headlines.push(headline);
@@ -28,7 +24,7 @@ app.get('/api/headlines', async (req, res) => {
         });
 
         if (headlines.length === 0) {
-            throw new Error('No headlines found'); // Throw error if no headlines are extracted
+            throw new Error('No headlines found');
         }
 
         res.json({ headlines });

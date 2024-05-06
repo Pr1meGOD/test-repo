@@ -29,6 +29,7 @@
 
   <script>
 
+
 async function fetchNewsFromServer() {
     try {
         const response = await fetch('http://localhost:3000/api/news'); // Change the URL to match your backend route
@@ -62,6 +63,7 @@ function parseHTML(html) {
 
     return newsTitles;
 }
+
 
 // Call the fetch function to fetch news headlines from your server
 fetchNewsFromServer();

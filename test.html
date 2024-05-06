@@ -1,84 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Real-Time News Sentiment Analysis</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-  }
-  #news {
-    margin-bottom: 20px;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time News Sentiment Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #news {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-  <h1>Real-Time News Sentiment Analysis</h1>
+    <h1>Real-Time News Sentiment Analysis</h1>
 
-  <div id="news">
-    <h2>Latest News</h2>
-    <ul id="newsList"></ul>
-  </div>
+    <div id="news">
+        <h2>Latest News</h2>
+        <ul id="newsList"></ul>
+    </div>
 
-  <div id="sentiment">
-    <h2>Sentiment Analysis</h2>
-    <p id="sentimentResult"></p>
-  </div>
+    <div id="sentiment">
+        <h2>Sentiment Analysis</h2>
+        <p id="sentimentResult"></p>
+    </div>
 
-<script>
-// Function to fetch news data from the server
-async function fetchNewsFromServer() {
-    try {
-        const response = await fetch('http://localhost:3000/api/news'); // Change the URL to match your backend route
-        const data = await response.text();
-        console.log(data); // Display fetched data in console
-        
-        // Parse HTML response and extract news headlines
-        const headlines = parseHTML(data);
-        console.log(headlines); // Display extracted news headlines
-        
-        // Display news headlines on the webpage
-        displayNewsHeadlines(headlines);
-    } catch (error) {
-        console.error('Error fetching news:', error);
-    }
-}
+    <script>
+        async function fetchNewsFromServer() {
+            try {
+                const response = await fetch('http://localhost:3000/api/news'); // Change the URL to match your backend route
+                const data = await response.text();
+                console.log(data); // Display fetched data in console
 
-// Function to parse HTML response and extract news headlines
-function parseHTML(html) {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
+                // Parse HTML response and extract news headlines
+                const headlines = parseHTML(data);
+                console.log(headlines); // Display extracted news headlines
 
-    const newsTitles = [];
-    const newsElements = doc.querySelectorAll('.media-body');
-    newsElements.forEach(element => {
-        const titleElement = element.querySelector('.media-heading a');
-        if (titleElement) {
-            const title = titleElement.textContent.trim();
-            newsTitles.push(title);
+                // Display news headlines on the webpage
+                displayNewsHeadlines(headlines);
+            } catch (error) {
+                console.error('Error fetching news:', error);
+            }
         }
-    });
 
-    return newsTitles;
-}
+        function parseHTML(html) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
 
-// Function to display news headlines on the webpage
-function displayNewsHeadlines(headlines) {
-    const newsList = document.getElementById('newsList');
-    headlines.forEach(title => {
-        const listItem = document.createElement('li');
-        listItem.textContent = title;
-        newsList.appendChild(listItem);
-    });
-}
+            const newsTitles = [];
+            const newsElements = doc.querySelectorAll('.gs-c-promo-heading');
+            newsElements.forEach(element => {
+                const titleElement = element.querySelector('h3');
+                if (titleElement) {
+                    const title = titleElement.textContent.trim();
+                    newsTitles.push(title);
+                }
+            });
 
-// Call the fetch function to fetch news headlines from your server
-fetchNewsFromServer();
-</script>
+            return newsTitles;
+        }
 
+        function displayNewsHeadlines(headlines) {
+            const newsList = document.getElementById('newsList');
+            headlines.forEach(title => {
+                const listItem = document.createElement('li');
+                listItem.textContent = title;
+                newsList.appendChild(listItem);
+            });
+        }
 
-  </script>
+        // Call the fetch function to fetch news headlines from your server
+        fetchNewsFromServer();
+    </script>
 </body>
 </html>

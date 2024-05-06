@@ -18,10 +18,10 @@ app.get('/api/headlines', async (req, res) => {
         // Parse HTML using Cheerio
         const $ = cheerio.load(html);
 
-        // Extract headlines from the news section (assuming they are in a specific class or element)
+        // Extract headlines from the specific HTML structure
         const headlines = [];
-        $('.gs-c-promo-heading').each((index, element) => {
-            const headline = $(element).find('h3').text().trim();
+        $('h2.sc-4fedabc7-3').each((index, element) => {
+            const headline = $(element).text().trim();
             if (headline) {
                 headlines.push(headline);
             }

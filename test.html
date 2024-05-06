@@ -30,36 +30,14 @@
     <script>
         async function fetchNewsFromServer() {
             try {
-                const response = await fetch('http://localhost:3000/api/news'); // Change the URL to match your backend route
-                const data = await response.text();
-                console.log(data); // Display fetched data in console
-
-                // Parse HTML response and extract news headlines
-                const headlines = parseHTML(data);
-                console.log(headlines); // Display extracted news headlines
+                const response = await fetch('http://localhost:3000/api/headlines'); // Updated backend route
+                const data = await response.json(); // Parse response as JSON
 
                 // Display news headlines on the webpage
-                displayNewsHeadlines(headlines);
+                displayNewsHeadlines(data.headlines);
             } catch (error) {
                 console.error('Error fetching news:', error);
             }
-        }
-
-        function parseHTML(html) {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-
-            const newsTitles = [];
-            const newsElements = doc.querySelectorAll('.gs-c-promo-heading');
-            newsElements.forEach(element => {
-                const titleElement = element.querySelector('h3');
-                if (titleElement) {
-                    const title = titleElement.textContent.trim();
-                    newsTitles.push(title);
-                }
-            });
-
-            return newsTitles;
         }
 
         function displayNewsHeadlines(headlines) {

@@ -49,6 +49,3 @@ import('node-fetch').then(async ({ default: fetch }) => {
 }).catch(error => {
     console.error('Error importing node-fetch:', error);
 });
-
-
-

@@ -13,24 +13,23 @@ import('node-fetch').then(async ({ default: fetch }) => {
         next();
     });
 
-    // API endpoint to fetch news headlines
+    // API endpoint to fetch news headlines from BBC News
     app.get('/news', async (req, res) => {
         try {
-            const response = await fetch('https://www.hindustantimes.com/rss/topnews/rssfeed.xml');
-            const data = await response.text();
+            const response = await fetch('https://www.bbc.com/news');
+            const html = await response.text();
             const parser = new DOMParser();
-            const xml = parser.parseFromString(data, 'application/xml');
-
-            const items = xml.getElementsByTagName('item'); // Use getElementsByTagName instead of querySelectorAll
-
+            const doc = parser.parseFromString(html, 'text/html');
+            const headlines = doc.querySelectorAll('.gel-layout__item');
             const newsHeadlines = [];
-            for (let i = 0; i < items.length; i++) {
-                const title = items[i].querySelector('title').textContent;
-                const link = items[i].querySelector('link').textContent;
-                newsHeadlines.push({ title, link });
-            }
 
-            res.setHeader('Content-Type', 'application/json'); // Set response Content-Type header
+            headlines.forEach(headline => {
+                const title = headline.querySelector('.gs-c-promo-heading__title').textContent.trim();
+                const link = headline.querySelector('.gs-c-promo-heading__link').href;
+                newsHeadlines.push({ title, link });
+            });
+
+            res.setHeader('Content-Type', 'application/json');
             res.json(newsHeadlines);
         } catch (error) {
             console.error('Error fetching news headlines:', error);
@@ -44,3 +43,4 @@ import('node-fetch').then(async ({ default: fetch }) => {
 }).catch(error => {
     console.error('Error importing node-fetch:', error);
 });
+

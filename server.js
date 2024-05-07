@@ -1,6 +1,5 @@
 import('node-fetch').then(async ({ default: fetch }) => {
     const express = require('express');
-    const { response } = require('express');
 
     const app = express();
     const port = 3000;
@@ -8,49 +7,31 @@ import('node-fetch').then(async ({ default: fetch }) => {
     // Middleware to enable CORS
     app.use((req, res, next) => {
         res.setHeader('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
-        res.setHeader('Access-Control-Allow-Methods', '*'); // Allow GET, POST, OPTIONS requests
-        res.setHeader('Access-Control-Allow-Headers', '*'); // Allow Content-Type header
+        res.setHeader('Access-Control-Allow-Methods', '*'); // Allow only GET requests
+        res.setHeader('Access-Control-Allow-Headers', '*'); // Allow only Content-Type header
         next();
     });
 
-    // Function to fetch news from BBC
-    async function fetchNewsFromBBC() {
+    // API endpoint to fetch news headlines from BBC
+    app.get('/news', async (req, res) => {
         try {
-            const apiKey = '8299ddae71074acd8232edcfef9b7fb8';
-            const mainUrl = `https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey=${apiKey}`;
-            const response = await fetch(mainUrl);
+            const apiKey = '8299ddae71074acd8232edcfef9b7fb8'; // Replace with your News API key
+            const response = await fetch(`https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey=${apiKey}`);
             const data = await response.json();
-            const articles = data.articles || [];
 
-            const results = articles.map(article => article.title);
-            results.forEach((result, index) => {
-                console.log(index + 1, result); // Print trending news to console
-            });
-
-            return results;
-        } catch (error) {
-            console.error('Error fetching news:', error);
-            return [];
-        }
-    }
-
-    // API endpoint to fetch and speak news
-    app.get('/speakNews', async (req, res) => {
-        try {
-            const newsResults = await fetchNewsFromBBC();
-            if (newsResults.length > 0) {
-                const newsText = newsResults.join('. ');
-                const newsSpeech = new SpeechSynthesisUtterance(newsText);
-                window.speechSynthesis.speak(newsSpeech); // Speak the news
-
-                res.setHeader('Content-Type', 'application/json');
-                res.json({ message: 'News spoken successfully.' });
+            if (data.status === 'ok') {
+                const articles = data.articles;
+                const newsHeadlines = articles.map(article => ({
+                    title: article.title,
+                    link: article.url
+                }));
+                res.json(newsHeadlines);
             } else {
-                res.status(404).json({ error: 'No news articles found.' });
+                throw new Error('Failed to fetch news headlines from BBC');
             }
         } catch (error) {
-            console.error('Error speaking news:', error);
-            res.status(500).json({ error: 'Failed to speak news.' });
+            console.error('Error fetching news headlines:', error);
+            res.status(500).json({ error: 'Failed to fetch news headlines' });
         }
     });
 

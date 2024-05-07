@@ -20,14 +20,15 @@ import('node-fetch').then(async ({ default: fetch }) => {
             const data = await response.text();
             const parser = new DOMParser();
             const xml = parser.parseFromString(data, 'application/xml');
-            const items = xml.querySelectorAll('item');
+
+            const items = xml.getElementsByTagName('item'); // Use getElementsByTagName instead of querySelectorAll
 
             const newsHeadlines = [];
-            items.forEach(item => {
-                const title = item.querySelector('title').textContent;
-                const link = item.querySelector('link').textContent;
+            for (let i = 0; i < items.length; i++) {
+                const title = items[i].querySelector('title').textContent;
+                const link = items[i].querySelector('link').textContent;
                 newsHeadlines.push({ title, link });
-            });
+            }
 
             res.setHeader('Content-Type', 'application/json'); // Set response Content-Type header
             res.json(newsHeadlines);

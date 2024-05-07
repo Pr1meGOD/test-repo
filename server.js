@@ -1,6 +1,6 @@
 import('node-fetch').then(async ({ default: fetch }) => {
     const express = require('express');
-    const { DOMParser } = require('xmldom');
+    const { JSDOM } = require('jsdom');
 
     const app = express();
     const port = 3000;
@@ -18,15 +18,21 @@ import('node-fetch').then(async ({ default: fetch }) => {
         try {
             const response = await fetch('https://www.bbc.com/news');
             const html = await response.text();
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            const headlines = doc.querySelectorAll('.gel-layout__item');
+            const dom = new JSDOM(html);
+            const { document } = dom.window;
+
+            const headlines = document.querySelectorAll('.gel-layout__item');
             const newsHeadlines = [];
 
             headlines.forEach(headline => {
-                const title = headline.querySelector('.gs-c-promo-heading__title').textContent.trim();
-                const link = headline.querySelector('.gs-c-promo-heading__link').href;
-                newsHeadlines.push({ title, link });
+                const titleElement = headline.querySelector('.gs-c-promo-heading__title');
+                const linkElement = headline.querySelector('.gs-c-promo-heading__link');
+
+                if (titleElement && linkElement) {
+                    const title = titleElement.textContent.trim();
+                    const link = linkElement.href;
+                    newsHeadlines.push({ title, link });
+                }
             });
 
             res.setHeader('Content-Type', 'application/json');
@@ -43,4 +49,5 @@ import('node-fetch').then(async ({ default: fetch }) => {
 }).catch(error => {
     console.error('Error importing node-fetch:', error);
 });
+
 

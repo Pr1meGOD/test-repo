@@ -1,6 +1,6 @@
 import('node-fetch').then(async ({ default: fetch }) => {
     const express = require('express');
-    const { JSDOM } = require('jsdom');
+    const { response } = require('express');
 
     const app = express();
     const port = 3000;
@@ -13,33 +13,44 @@ import('node-fetch').then(async ({ default: fetch }) => {
         next();
     });
 
-    // API endpoint to fetch news headlines from BBC News
-    app.get('/news', async (req, res) => {
+    // Function to fetch news from BBC
+    async function fetchNewsFromBBC() {
         try {
-            const response = await fetch('https://www.bbc.com/news');
-            const html = await response.text();
-            const dom = new JSDOM(html);
-            const { document } = dom.window;
+            const apiKey = '8299ddae71074acd8232edcfef9b7fb8';
+            const mainUrl = `https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey=${apiKey}`;
+            const response = await fetch(mainUrl);
+            const data = await response.json();
+            const articles = data.articles || [];
 
-            const headlines = document.querySelectorAll('.gel-layout__item');
-            const newsHeadlines = [];
-
-            headlines.forEach(headline => {
-                const titleElement = headline.querySelector('.gs-c-promo-heading__title');
-                const linkElement = headline.querySelector('.gs-c-promo-heading__link');
-
-                if (titleElement && linkElement) {
-                    const title = titleElement.textContent.trim();
-                    const link = linkElement.href;
-                    newsHeadlines.push({ title, link });
-                }
+            const results = articles.map(article => article.title);
+            results.forEach((result, index) => {
+                console.log(index + 1, result); // Print trending news to console
             });
 
-            res.setHeader('Content-Type', 'application/json');
-            res.json(newsHeadlines);
+            return results;
         } catch (error) {
-            console.error('Error fetching news headlines:', error);
-            res.status(500).json({ error: 'Failed to fetch news headlines' });
+            console.error('Error fetching news:', error);
+            return [];
+        }
+    }
+
+    // API endpoint to fetch and speak news
+    app.get('/speakNews', async (req, res) => {
+        try {
+            const newsResults = await fetchNewsFromBBC();
+            if (newsResults.length > 0) {
+                const newsText = newsResults.join('. ');
+                const newsSpeech = new SpeechSynthesisUtterance(newsText);
+                window.speechSynthesis.speak(newsSpeech); // Speak the news
+
+                res.setHeader('Content-Type', 'application/json');
+                res.json({ message: 'News spoken successfully.' });
+            } else {
+                res.status(404).json({ error: 'No news articles found.' });
+            }
+        } catch (error) {
+            console.error('Error speaking news:', error);
+            res.status(500).json({ error: 'Failed to speak news.' });
         }
     });
 

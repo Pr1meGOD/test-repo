@@ -35,6 +35,7 @@
 <body>
     <h1>News Headlines</h1>
     <ul id="newsList"></ul>
+    <button id="speakButton">Speak News</button>
 
     <script>
         async function fetchNewsHeadlinesFromServer() {
@@ -63,8 +64,22 @@
             }
         }
 
-        // Fetch news headlines from backend server when the page loads
+        async function speakNewsFromServer() {
+            try {
+                const response = await fetch('http://localhost:3000/speakNews'); // Trigger speak news endpoint
+                if (!response.ok) {
+                    throw new Error('Failed to speak news from server');
+                }
+                const data = await response.json();
+                alert(data.message); // Display success message
+            } catch (error) {
+                console.error('Error speaking news from server:', error);
+                alert('Failed to speak news. Please try again.');
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', fetchNewsHeadlinesFromServer);
+        document.getElementById('speakButton').addEventListener('click', speakNewsFromServer);
     </script>
 </body>
 </html>

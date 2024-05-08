@@ -37,6 +37,7 @@
     <ul id="newsList"></ul>
 
     <script>
+
      document.addEventListener('DOMContentLoaded', async () => {
     try {
         const response = await fetch('http://localhost:3000/news');
@@ -80,6 +81,11 @@ async function fetchSentiment(title) {
         }
 
         const result = await response.json();
+
+        if (!result || !result.sentiment) {
+            throw new Error('Sentiment analysis result is undefined or missing sentiment property');
+        }
+
         const sentiment = result.sentiment.toUpperCase();
         return sentiment;
     } catch (error) {
@@ -87,6 +93,8 @@ async function fetchSentiment(title) {
         return 'N/A';
     }
 }
+
+
 
     </script>
 </body>

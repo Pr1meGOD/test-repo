@@ -1,6 +1,6 @@
-const express = require('express');
-const fetch = require('node-fetch');
-const axios = require('axios');
+import express from 'express';
+import fetch from 'node-fetch';
+import axios from 'axios';
 
 const app = express();
 const port = 3000;
@@ -56,4 +56,3 @@ async function getSentiment(title) {
 app.listen(port, () => {
     console.log(`Backend server running at http://localhost:${port}`);
 });
-

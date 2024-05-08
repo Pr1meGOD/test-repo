@@ -1,5 +1,6 @@
-import express from 'express';
-import fetch from 'node-fetch';
+const express = require('express');
+const fetch = require('node-fetch');
+const axios = require('axios');
 
 const app = express();
 const port = 3000;
@@ -21,12 +22,15 @@ app.get('/news', async (req, res) => {
 
         if (data.status === 'ok') {
             const articles = data.articles;
-            const newsHeadlines = articles.map(article => ({
-                title: article.title,
-                link: article.url,
-                sentiment: getSentiment(article.title) // Call function to get sentiment
-            }));
-            res.json(newsHeadlines);
+            const newsHeadlines = articles.map(async article => {
+                const title = article.title;
+                const link = article.url;
+                const sentiment = await getSentiment(title); // Call async function to get sentiment
+                return { title, link, sentiment };
+            });
+            Promise.all(newsHeadlines).then(results => {
+                res.json(results);
+            });
         } else {
             throw new Error('Failed to fetch news headlines from BBC');
         }
@@ -37,11 +41,16 @@ app.get('/news', async (req, res) => {
 });
 
 // Function to perform sentiment analysis (dummy function for demonstration)
-function getSentiment(title) {
-    // Perform sentiment analysis logic here
-    // This is a placeholder function, you would replace it with your actual sentiment analysis logic
-    const randomSentiment = Math.random() < 0.5 ? 'Positive' : 'Negative';
-    return randomSentiment;
+async function getSentiment(title) {
+    try {
+        const sentimentAPI = 'https://xhkc56io19.execute-api.us-east-1.amazonaws.com/dev'; // Sentiment analysis API endpoint
+        const response = await axios.post(sentimentAPI, { text: title });
+        const sentiment = response.data.sentiment;
+        return sentiment;
+    } catch (error) {
+        console.error('Error fetching sentiment:', error);
+        return 'N/A'; // Return 'N/A' if sentiment analysis fails
+    }
 }
 
 app.listen(port, () => {

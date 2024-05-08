@@ -83,16 +83,18 @@ async function fetchSentiment(title) {
 
         const result = await response.json();
 
-        if (!result) {
-            throw new Error('Sentiment analysis result is undefined');
+        if (!result || !result.body) {
+            throw new Error('Invalid response from server');
         }
 
-        if (!result.sentiment) {
+        const body = JSON.parse(result.body);
+
+        if (!body || !body.sentiment) {
             console.error('Sentiment analysis result:', result);
             throw new Error('Sentiment property is missing in the analysis result');
         }
 
-        const sentiment = result.sentiment.toUpperCase();
+        const sentiment = body.sentiment.toUpperCase();
         return sentiment;
     } catch (error) {
         console.error('Error fetching sentiment:', error);

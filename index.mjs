@@ -41,7 +41,7 @@ app.get('/news', async (req, res) => {
 // Function to perform sentiment analysis
 async function getSentiment(title) {
     try {
-        const sentimentAPI = 'https://xhkc56io19.execute-api.us-east-1.amazonaws.com/dev';
+        const sentimentAPI = 'https://c6a7zwwwyj.execute-api.us-east-1.amazonaws.com/devv';
         const response = await axios.post(sentimentAPI, { text: title });
         const sentiment = response.data.sentiment;
         return sentiment;

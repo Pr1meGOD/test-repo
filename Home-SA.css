@@ -172,5 +172,6 @@ a{
 
 #footer-div{
   display: flex;
-
+  flex-direction: column-reverse;
 }
+

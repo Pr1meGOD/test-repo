@@ -165,29 +165,6 @@ a{
       margin-bottom: 10px;
   }
 
- /* footer ul {
-      list-style-type: none;
-      padding: 0;
-  }
-
-  footer ul li {
-      display: inline-block;
-      margin-right: 40px;
-  }
-
-  footer ul li:last-child {
-      margin-right: 0;
-  }
-
-  footer ul li a {
-      text-decoration: none;
-      margin-right: 60px;
-  }
-
-  footer ul li a:hover {
-      color: #007bff;
-  } */
-
   footer ul {
     list-style-type: none;
     padding: 0;

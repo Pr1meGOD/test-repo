@@ -170,8 +170,18 @@ a{
     */
     
 
-#footer-div{
-  display: flex;
-  flex-direction: column-reverse;
+#footer-list li{
+  margin-right: 40px;
+  display: inline-block;
+  list-style-type: none;
+  justify-content: space-evenly;
+  align-items: center;
+}
+#footer-links{
+  margin-right: 48px;
+  display: inline;
+}
+#footer-links-2{
+  display: inline-block;
 }
 

@@ -154,7 +154,7 @@ a{
 
 
      /* Footer Styles */
-  footer {
+  #footer-section {
     background-color: black;
     padding: 20px;
   }
@@ -179,11 +179,13 @@ a{
 
   footer ul li a {
       text-decoration: none;
+      margin-right: 60px;
   }
 
   footer ul li a:hover {
       color: #007bff;
   }
+
 
     
 

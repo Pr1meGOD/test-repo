@@ -152,3 +152,25 @@ a{
   }
 
 
+
+    /* footer */
+   /* nav ul li{
+      display: inline-block;
+      font-size: 16px;
+      list-style: none;
+      margin: 10px 30px;
+    }
+    nav ul li a{
+      text-decoration: none;
+      transition: 0.5s;
+    }
+    nav ul li a:hover{
+      color: #f9004d;
+    }
+    */
+    
+
+#footer-div{
+  display: flex;
+
+}

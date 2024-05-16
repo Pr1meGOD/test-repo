@@ -154,6 +154,8 @@ a{
 
 
      /* Footer Styles */
+
+
   #footer-section {
     background-color: black;
     padding: 20px;
@@ -163,7 +165,7 @@ a{
       margin-bottom: 10px;
   }
 
-  footer ul {
+ /* footer ul {
       list-style-type: none;
       padding: 0;
   }
@@ -184,7 +186,38 @@ a{
 
   footer ul li a:hover {
       color: #007bff;
-  }
+  } */
+
+  footer ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+footer ul li {
+    display: inline-block;
+    margin-right: 50px;
+}
+.footer-font{
+  font-size: 20px;
+}
+
+footer ul li a {
+    text-decoration: none;
+}
+
+footer ul li a.linkedin {
+    margin-right: 84px; /* Adjust margin-right for LinkedIn links */
+}
+
+footer ul li a.github {
+    margin-right: 96px; /* Adjust margin-right for GitHub links */
+}
+
+footer ul li a:hover {
+    color: #007bff;
+}
+
+
 
 
     

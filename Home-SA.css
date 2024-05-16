@@ -154,11 +154,11 @@ a{
 
 
      /* Footer Styles */
-     footer {
-      background-color: black;
-      padding: 20px;
+footer {
+    background-color: black;
+    padding: 20px;
   }
-  
+
   footer h2 {
       margin-bottom: 10px;
   }

@@ -7,6 +7,12 @@
  <title>Main Sentiment Analysis</title>
 
   <link rel="stylesheet" href="Home-SA.css">
+  <script>
+    function scrollToFooter() {
+        var footerSection = document.getElementById('footer-section');
+        footerSection.scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
 </head>
 <body>
   <div class="container">
@@ -18,7 +24,7 @@
         <li><a href="Home-SA.html">Home</a></li>
         <li><a href="basic-SA.html" target="_blank">Basic Sentiment Analysis</a></li>
         <li><a href="realtime-SA.html" target="_blank">Real Time Feed Sentiment Analysis</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><a href="#" onclick="scrollToFooter()">Contact</a></li>
       </ul>
     </nav>
     <div class="content">
@@ -76,6 +82,33 @@
       <br>
       <br>
 
+<hr>
+
+<br>
+<br>
+
+<footer id="footer-section">
+    <h2>Contact Us:</h2>
+    <ul>
+        <li class="footer-font">Atharva Palande</li> 
+        <li class="footer-font">Atharva Bhosale</li> 
+    </ul>
+   
+    <ul>
+        <li><a href="https://www.linkedin.com/in/atharva-palande-3588682a1/" target="_blank" class="linkedin">• LinkedIn</a></li>
+        <li><a href="https://www.linkedin.com/in/atharva-bhosale-a0b74224b/" target="_blank" class="linkedin">• LinkedIn</a></li>
+    </ul>
+    <ul>
+        <li><a href="https://github.com/Pr1meGOD" target="_blank" class="github">• Github</a></li>
+        <li><a href="https://github.com/Athxrvx12" target="_blank" class="github">• Github</a></li>
+    </ul>
+</footer>
+    <br>
+    <br>
+ 
   </div>
+
+
+
 </body>
 </html>

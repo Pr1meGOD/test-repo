@@ -1,57 +1,55 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Website</title>
-    <!-- Add your CSS stylesheets and other meta tags here -->
+    <style>
+        /* Footer Styles */
+        footer {
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        footer h2 {
+            margin-bottom: 10px;
+        }
+        footer ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        footer ul li {
+            display: inline-block;
+            margin-right: 20px;
+        }
+        footer ul li:last-child {
+            margin-right: 0;
+        }
+        footer ul li a {
+            text-decoration: none;
+            color: #333;
+        }
+        footer ul li a:hover {
+            color: #007bff;
+        }
+         
+    </style>
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#" onclick="scrollToFooter()">Contact</a></li>
-        </ul>
-    </nav>
-
-    <main>
-        <!-- Your main content here -->
-    </main>
-
-    <footer id="footer-section">
+    <footer>
         <h2>Contact Us:</h2>
-        <div>
-            <ul>
-                <li>Atharva Palande</li>
-                <li>
-                    <a href="https://www.linkedin.com/in/atharva-palande" target="_blank">Linkedin</a>
-                </li>
-                <li>
-                    <a href="https://github.com/AtharvaPalande" target="_blank">Github</a>
-                </li>
-            </ul>
-        </div>
-
-        <div>
-            <ul>
-                <li>Atharva Bhosale</li>
-                <li>
-                    <a href="https://www.linkedin.com/in/atharva-bhosale" target="_blank">Linkedin</a>
-                </li>
-                <li>
-                    <a href="https://github.com/AtharvaBhosale" target="_blank">Github</a>
-                </li>
-            </ul>
-        </div>
+        <ul>
+            <li>AB</li>
+            <li>AP</li>
+        </ul>
+        <ul>
+            <li><a href="https://www.linkedin.com/in/atharva-bhosale" target="_blank">LinkedIn (AB)</a></li>
+            <li><a href="https://www.linkedin.com/in/atharva-palande" target="_blank">LinkedIn (AP)</a></li>
+        </ul>
+        <ul>
+            <li><a href="https://github.com/AtharvaBhosale" target="_blank">GitHub (AB)</a></li>
+            <li><a href="https://github.com/AtharvaPalande" target="_blank">GitHub (AP)</a></li>
+        </ul>
     </footer>
-
-    <!-- Add your JavaScript code here -->
-    <script>
-        function scrollToFooter() {
-            var footerSection = document.getElementById('footer-section');
-            footerSection.scrollIntoView({ behavior: 'smooth' });
-        }
-    </script>
 </body>
 </html>

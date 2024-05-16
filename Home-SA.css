@@ -183,11 +183,11 @@ footer ul li a {
 }
 
 footer ul li a.linkedin {
-    margin-right: 84px; /* Adjust margin-right for LinkedIn links */
+    margin-right: 84px; 
 }
 
 footer ul li a.github {
-    margin-right: 96px; /* Adjust margin-right for GitHub links */
+    margin-right: 96px; 
 }
 
 footer ul li a:hover {

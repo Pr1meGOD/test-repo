@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> new york times headlines </title>
+    <title>cnn news</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <style>
-body {
+    body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     margin: 0;
@@ -32,6 +33,7 @@ h1 {
 
 ul {
     list-style: none;
+    text-decoration: none;
     padding: 0;
 }
 
@@ -41,14 +43,13 @@ li {
     padding: 10px;
     border-radius: 3px;
 }
-
 </style>
 
 <script>
 
 document.addEventListener("DOMContentLoaded", function() {
-    const apiKey = 'LMv5Elsw8GmMHGOhyr3MQTuSGHNWgxgu';  // Replace with your New York Times API key
-    const url = `https://api.nytimes.com/svc/topstories/v2/home.json?api-key=${apiKey}`;
+    const apiKey = 'e382cf0baf104c3ca084d880a340dfa9';  // Replace with your NewsAPI key
+    const url = `https://newsapi.org/v2/top-headlines?sources=cnn&apiKey=${apiKey}`;
     const newsList = document.getElementById('news-list');
 
     function fetchNews() {
@@ -56,11 +57,15 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(response => response.json())
             .then(data => {
                 newsList.innerHTML = ''; // Clear the current list
-                const articles = data.results.slice(0, 10); // Get the first 10 articles
+                const articles = data.articles.slice(0, 10); // Get the first 10 articles
 
                 articles.forEach((article, index) => {
                     const listItem = document.createElement('li');
-                    listItem.textContent = `${index + 1}. ${article.title}`;
+                    const link = document.createElement('a');
+                    link.href = article.url;
+                    link.textContent = `${index + 1}. ${article.title}`;
+                    link.target = "_blank"; // Open link in a new tab
+                    listItem.appendChild(link);
                     newsList.appendChild(listItem);
                 });
             })
@@ -82,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 <body>
     <div class="container">
-        <h1>Latest News Headlines</h1>
+        <h1>Latest CNN News Headlines</h1>
         <ul id="news-list"></ul>
     </div>
     <script src="scripts.js"></script>

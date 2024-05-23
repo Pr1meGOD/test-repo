@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <style>
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -42,6 +43,15 @@ li {
     border-radius: 3px;
 }
 
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
 </style>
 
 <script>
@@ -60,7 +70,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 articles.forEach((article, index) => {
                     const listItem = document.createElement('li');
-                    listItem.textContent = `${index + 1}. ${article.title}`;
+                    const link = document.createElement('a');
+                    link.href = article.url; // Set the URL of the article
+                    link.textContent = `${index + 1}. ${article.title}`;
+                    link.target = '_blank'; // Open the link in a new tab/window
+                    listItem.appendChild(link);
                     newsList.appendChild(listItem);
                 });
             })

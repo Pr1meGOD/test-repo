@@ -3,131 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@600&display=swap" rel="stylesheet">
-    <title>Sentiment Analysis</title>
+    <title>News Headlines</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <h1>
-        SENTIMENT ANALYSIS
-    </h1>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
 
-    <div id="inputdiv">
-        <textarea cols="150" rows="20" id="inputText" placeholder="enter some text:"> </textarea>
-    </div>
+.container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
 
-    <div id="buttondiv">
-        <button id="analyzeButton">
-            Analyze 
-        </button>
-    </div>
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
 
-    <br>
-    <br>
+ul {
+    list-style: none;
+    padding: 0;
+}
 
-    <hr>
+li {
+    background: #e2e2e2;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 3px;
+}
 
-    <div id="headingdiv">
-        <h3 id="sentimentDisplay">
-        </h3>
-    </div>
+</style>
 
-    <style>
-        hr{
-            color: black;
-            background-color: black;
-            border: 1px solid black;
-        }
 
-        h1{
-            text-align: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            text-decoration: solid underline;
-        }
-        body{
-            background: linear-gradient(to right, #8360c3, #2ebf91)
-        }
-        #inputdiv{
-            display: flex;
-            justify-content: center;
-            align-items: center; 
-            margin-top: 80px;
-        }
-        button:hover{
-            box-shadow: 2px 3px 2px;
-            color: #001d3d;
-            transform: translateY(-2px);
-        }
-        button{
-            height: 75px;
-            width: 150px;
-            font-size: medium;
-            font-weight: bold;
-        }
-        button:hover{
-            cursor: pointer;
-        }
+<script>
 
-        #buttondiv{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 2%;
-        }
+document.addEventListener("DOMContentLoaded", function() {
+    const apiKey = '4c73a5e6-93d1-4051-8e96-933b8d4fa06b';  
+    const url = `https://content.guardianapis.com/search?api-key=${apiKey}`;
 
-        #headingdiv{
-            margin-left: 800px;
-            margin-top: 50px;
-            font-size: 20px;
-            font-family: 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
-        }
-        textarea{
-            font-size: 18px;
-        }
-    </style>
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const newsList = document.getElementById('news-list');
+            const articles = data.response.results;
 
-    <script>
-        document.getElementById('analyzeButton').addEventListener('click', async () => {
-            const textarea = document.getElementById('inputText');
-            const sentimentDisplay = document.getElementById('sentimentDisplay');
-
-            if (!textarea || !sentimentDisplay) {
-                console.error('Textarea or Sentiment Display Element not found.');
-                return;
-            }
-
-            const textareaValue = textarea.value || '';
-
-            if (textareaValue === '') {
-                console.error('Textarea value is empty.');
-                return;
-            }
-
-            try {
-                const response = await fetch('https://fy7ike3m1h.execute-api.us-east-1.amazonaws.com/ffff', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ text: textareaValue })
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-
-                const result = await response.json();
-
-                console.log('API Response:', result);
-
-                const body = JSON.parse(result.body);
-                const sentiment = body.sentiment || 'Unknown'; // Get the sentiment or set to 'Unknown' if not present
-                sentimentDisplay.textContent = `Sentiment: ${sentiment}`;
-            } catch (error) {
-                console.error('Error sending/receiving API request:', error);
-            }
+            articles.forEach((article, index) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${index + 1}. ${article.webTitle}`;
+                newsList.appendChild(listItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching news:', error);
         });
-    </script>
+});
+
+
+</script>
+<body>
+    <div class="container">
+        <h1>Latest News Headlines</h1>
+        <ul id="news-list"></ul>
+    </div>
+    <script src="scripts.js"></script>
 </body>
 </html>

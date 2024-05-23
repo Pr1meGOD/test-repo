@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Headlines</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    background: #e2e2e2;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 3px;
+}
+
+</style>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function() {
+    const apiKey = 'LMv5Elsw8GmMHGOhyr3MQTuSGHNWgxgu';  // Replace with your New York Times API key
+    const url = `https://api.nytimes.com/svc/topstories/v2/home.json?api-key=${apiKey}`;
+    const newsList = document.getElementById('news-list');
+
+    function fetchNews() {
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                newsList.innerHTML = ''; // Clear the current list
+                const articles = data.results;
+
+                articles.forEach((article, index) => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${index + 1}. ${article.title}`;
+                    newsList.appendChild(listItem);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching news:', error);
+            });
+    }
+
+    // Fetch news initially when the page loads
+    fetchNews();
+
+    // Set interval to fetch news every 5 minutes (300,000 milliseconds)
+    setInterval(fetchNews, 300000); // Adjust the interval as needed
+});
+
+</script>
+
+<body>
+    <div class="container">
+        <h1>Latest News Headlines</h1>
+        <ul id="news-list"></ul>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>

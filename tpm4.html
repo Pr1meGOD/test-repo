@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BBC News Headlines</title>
+</head>
+
+<style>
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    
+    .container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+    
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+    
+    li {
+        background: #e2e2e2;
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 3px;
+    }
+    
+    a {
+        text-decoration: none;
+        color: #000;
+    }
+    
+    a:hover {
+        text-decoration: underline;
+    }
+    
+    
+    </style>
+
+<body>
+    <ul id="news-list"></ul>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const newsList = document.getElementById('news-list');
+
+            function fetchNews() {
+                fetch('http://localhost:3000/bbc-news')
+                    .then(response => response.json())
+                    .then(data => {
+                        newsList.innerHTML = ''; // Clear the current list
+                        data.forEach((article, index) => {
+                            const listItem = document.createElement('li');
+                            const link = document.createElement('a');
+                            link.href = article.link;
+                            link.textContent = `${index + 1}. ${article.title} - Sentiment: ${article.sentiment}`;
+                            link.target = '_blank'; // Open the link in a new tab
+                            listItem.appendChild(link);
+                            newsList.appendChild(listItem);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching news:', error);
+                    });
+            }
+
+            // Fetch news initially when the page loads
+            fetchNews();
+
+            // Set interval to fetch news every 5 minutes (300,000 milliseconds)
+            setInterval(fetchNews, 300000); // Adjust the interval as needed
+        });
+    </script>
+</body>
+</html>

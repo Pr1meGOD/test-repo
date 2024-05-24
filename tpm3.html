@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const newsList = document.getElementById('news-list');
 
             function fetchNews() {
-                fetch('http://localhost:3000/news')
+                fetch('http://localhost:3000/cnn-news')
                     .then(response => response.json())
                     .then(data => {
                         newsList.innerHTML = ''; // Clear the current list

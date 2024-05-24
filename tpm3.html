@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const newsList = document.getElementById('news-list');
 
             function fetchNews() {
-                fetch('http://localhost:3000/cnn-news')
+                fetch('https://d9f4fa9e-3fa6-4f0b-b050-b51c3e8240b1-00-j383xofmnrq5.sisko.replit.dev/cnn-news')
                     .then(response => response.json())
                     .then(data => {
                         newsList.innerHTML = ''; // Clear the current list
@@ -87,7 +87,6 @@ document.addEventListener("DOMContentLoaded", function() {
             // Set interval to fetch news every 5 minutes (300,000 milliseconds)
             setInterval(fetchNews, 300000); // Adjust the interval as needed
         });
-
 
 </script>
 

@@ -59,39 +59,34 @@ a:hover {
 <script>
 
 document.addEventListener("DOMContentLoaded", function() {
-    const apiKey = 'e382cf0baf104c3ca084d880a340dfa9';  // Replace with your NewsAPI key
-    const url = `https://newsapi.org/v2/top-headlines?sources=cnn&apiKey=${apiKey}`;
-    const newsList = document.getElementById('news-list');
+            const newsList = document.getElementById('news-list');
 
-    function fetchNews() {
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                newsList.innerHTML = ''; // Clear the current list
-                const articles = data.articles.slice(0, 10); // Get the first 10 articles
+            function fetchNews() {
+                fetch('http://localhost:3000/news')
+                    .then(response => response.json())
+                    .then(data => {
+                        newsList.innerHTML = ''; // Clear the current list
+                        data.forEach((article, index) => {
+                            const listItem = document.createElement('li');
+                            const link = document.createElement('a');
+                            link.href = article.link;
+                            link.textContent = `${index + 1}. ${article.title} - Sentiment: ${article.sentiment}`;
+                            link.target = '_blank'; // Open the link in a new tab
+                            listItem.appendChild(link);
+                            newsList.appendChild(listItem);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching news:', error);
+                    });
+            }
 
-                articles.forEach((article, index) => {
-                    const listItem = document.createElement('li');
-                    const link = document.createElement('a');
-                    link.href = article.url;
-                    link.textContent = `${index + 1}. ${article.title}`;
-                    link.target = "_blank"; // Open link in a new tab
-                    listItem.appendChild(link);
-                    newsList.appendChild(listItem);
-                });
-            })
-            .catch(error => {
-                console.error('Error fetching news:', error);
-            });
-    }
+            // Fetch news initially when the page loads
+            fetchNews();
 
-    // Fetch news initially when the page loads
-    fetchNews();
-
-    // Set interval to fetch news every 5 minutes (300,000 milliseconds)
-    setInterval(fetchNews, 300000); // Adjust the interval as needed
-});
-
+            // Set interval to fetch news every 5 minutes (300,000 milliseconds)
+            setInterval(fetchNews, 300000); // Adjust the interval as needed
+        });
 
 
 </script>

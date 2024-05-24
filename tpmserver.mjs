@@ -13,28 +13,16 @@ app.use((req, res, next) => {
     next();
 });
 
-// API endpoint to fetch news headlines from BBC and CNN and perform sentiment analysis
-app.get('/news', async (req, res) => {
+// API endpoint to fetch news headlines from BBC and perform sentiment analysis
+app.get('/bbc-news', async (req, res) => {
     try {
-        const bbcApiKey = '8299ddae71074acd8232edcfef9b7fb8';
-        const cnnApiKey = 'e382cf0baf104c3ca084d880a340dfa9';
+        const apiKey = '8299ddae71074acd8232edcfef9b7fb8';
+        const response = await fetch(`https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey=${apiKey}`);
+        const data = await response.json();
 
-        const [bbcResponse, cnnResponse] = await Promise.all([
-            fetch(`https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey=${bbcApiKey}`),
-            fetch(`https://newsapi.org/v2/top-headlines?sources=cnn&apiKey=${cnnApiKey}`)
-        ]);
-
-        const [bbcData, cnnData] = await Promise.all([
-            bbcResponse.json(),
-            cnnResponse.json()
-        ]);
-
-        if (bbcData.status === 'ok' && cnnData.status === 'ok') {
-            const bbcArticles = bbcData.articles;
-            const cnnArticles = cnnData.articles;
-
-            const allArticles = [...bbcArticles, ...cnnArticles];
-            const newsHeadlines = await Promise.all(allArticles.map(async article => {
+        if (data.status === 'ok') {
+            const articles = data.articles;
+            const newsHeadlines = await Promise.all(articles.map(async article => {
                 const title = article.title;
                 const link = article.url;
                 const sentiment = await getSentiment(title);
@@ -42,7 +30,32 @@ app.get('/news', async (req, res) => {
             }));
             res.json(newsHeadlines);
         } else {
-            throw new Error('Failed to fetch news headlines from BBC or CNN');
+            throw new Error('Failed to fetch news headlines from BBC');
+        }
+    } catch (error) {
+        console.error('Error fetching news headlines:', error);
+        res.status(500).json({ error: 'Failed to fetch news headlines' });
+    }
+});
+
+// API endpoint to fetch news headlines from CNN and perform sentiment analysis
+app.get('/cnn-news', async (req, res) => {
+    try {
+        const apiKey = 'e382cf0baf104c3ca084d880a340dfa9';
+        const response = await fetch(`https://newsapi.org/v2/top-headlines?sources=cnn&apiKey=${apiKey}`);
+        const data = await response.json();
+
+        if (data.status === 'ok') {
+            const articles = data.articles;
+            const newsHeadlines = await Promise.all(articles.map(async article => {
+                const title = article.title;
+                const link = article.url;
+                const sentiment = await getSentiment(title);
+                return { title, link, sentiment };
+            }));
+            res.json(newsHeadlines);
+        } else {
+            throw new Error('Failed to fetch news headlines from CNN');
         }
     } catch (error) {
         console.error('Error fetching news headlines:', error);
@@ -66,3 +79,4 @@ async function getSentiment(title) {
 app.listen(port, () => {
     console.log(`Backend server running at http://localhost:${port}`);
 });
+

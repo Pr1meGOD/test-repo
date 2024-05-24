@@ -66,7 +66,7 @@
             const newsList = document.getElementById('news-list');
 
             function fetchNews() {
-                fetch('http://localhost:3000/bbc-news')
+                fetch('https://89febbf8-d6a1-4780-879b-8b71759c38cf-00-8oy4ua4jq8xu.sisko.replit.dev/news')
                     .then(response => response.json())
                     .then(data => {
                         newsList.innerHTML = ''; // Clear the current list

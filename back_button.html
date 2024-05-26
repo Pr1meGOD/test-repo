@@ -6,6 +6,88 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <div class="dropdown">
+        <label for="news-select">Choose a news source:</label>
+        <select id="news-select">
+            <option value="">Select a news source</option>
+            <option value="guardian-news">Guardian News</option>
+            <option value="cnn-news">CNN News</option>
+            <option value="bbc-news">BBC News</option>
+            <option value="nytimes-news">New York Times News</option>
+        </select>
+    </div>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .container {
+            display: none; /* Initially hide the container */
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: #e2e2e2;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 3px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #000;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+
+        .dropdown {
+            margin-bottom: 20px;
+        }
+
+        select {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const select = document.getElementById('news-select');
+            select.addEventListener('change', function() {
+                const selectedOption = select.value;
+                if (selectedOption) {
+                    window.location.href = `${selectedOption}.html`;
+                }
+            });
+        });
+    </script>
 </body>
 </html>

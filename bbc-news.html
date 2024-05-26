@@ -4,86 +4,139 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BBC News Headlines</title>
-</head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-<style>
+        .container {
+            background-color: #fff;
+            display: block;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
 
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
-    
-    .container {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    
-    h1 {
-        font-size: 24px;
-        margin-bottom: 20px;
-    }
-    
-    ul {
-        list-style: none;
-        padding: 0;
-    }
-    
-    li {
-        background: #e2e2e2;
-        margin: 10px 0;
-        padding: 10px;
-        border-radius: 3px;
-    }
-    
-    a {
-        text-decoration: none;
-        color: #000;
-    }
-    
-    a:hover {
-        text-decoration: underline;
-    }
-    
-    
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: #e2e2e2;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 3px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #000;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
     </style>
 
+<style>
+    /* Button styling */
+    .button {
+        display: inline-block;
+        padding: 12px 24px;
+        background-color: #000000; /* black */
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        outline: none;
+        transition: background-color 0.4s, transform 0.4s;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Button hover effect */
+    .button:hover {
+        background-color: #585858; /* Darker green */
+        transform: translateY(-0.5px);
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Button focus effect */
+    .button:focus {
+        outline: none;
+    }
+</style>
+</head>
 <body>
- 
+
     <div class="container">
         <h1>Latest BBC News Headlines</h1>
         <ul id="news-list"></ul>
+        <a href="back_button.html"><button class="button">Go back</button></a>
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const newsList = document.getElementById('news-list');
 
-            function fetchNews() {
-                fetch('https://89febbf8-d6a1-4780-879b-8b71759c38cf-00-8oy4ua4jq8xu.sisko.replit.dev/news')
-                    .then(response => response.json())
-                    .then(data => {
-                        newsList.innerHTML = ''; // Clear the current list
-                        data.forEach((article, index) => {
-                            const listItem = document.createElement('li');
-                            const link = document.createElement('a');
-                            link.href = article.link;
-                            link.textContent = `${index + 1}. ${article.title} - Sentiment: ${article.sentiment}`;
-                            link.target = '_blank'; // Open the link in a new tab
-                            listItem.appendChild(link);
-                            newsList.appendChild(listItem);
-                        });
-                    })
-                    .catch(error => {
-                        console.error('Error fetching news:', error);
+            async function fetchNews() {
+                try {
+                    const response = await fetch('https://89febbf8-d6a1-4780-879b-8b71759c38cf-00-8oy4ua4jq8xu.sisko.replit.dev/news');
+                    const data = await response.json();
+                    newsList.innerHTML = ''; // Clear the current list
+
+                    for (const [index, article] of data.entries()) {
+                        const listItem = document.createElement('li');
+                        const link = document.createElement('a');
+                        link.href = article.link;
+                        link.textContent = `${index + 1}. ${article.title}`;
+                        link.target = '_blank'; // Open the link in a new tab
+
+                        const sentiment = await fetchSentiment(article.title);
+
+                        const sentimentSpan = document.createElement('span');
+                        sentimentSpan.textContent = ` - Sentiment: ${sentiment}`;
+
+                        listItem.appendChild(link);
+                        listItem.appendChild(sentimentSpan);
+                        newsList.appendChild(listItem);
+                    }
+                } catch (error) {
+                    console.error('Error fetching news:', error);
+                }
+            }
+
+            async function fetchSentiment(title) {
+                try {
+                    const response = await fetch('https://xhkc56io19.execute-api.us-east-1.amazonaws.com/dev', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ text: title })
                     });
+                    const result = await response.json();
+                    const sentimentData = JSON.parse(result.body);
+                    return sentimentData.sentiment;
+                } catch (error) {
+                    console.error('Error fetching sentiment:', error);
+                    return 'N/A';
+                }
             }
 
             // Fetch news initially when the page loads
@@ -93,5 +146,6 @@
             setInterval(fetchNews, 300000); // Adjust the interval as needed
         });
     </script>
+     
 </body>
 </html>

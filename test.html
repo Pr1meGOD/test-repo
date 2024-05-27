@@ -53,19 +53,6 @@
         nav ul li a:hover {
             color: #f9004d;
         }
-     /*   .content {
-            margin-top: 10%;
-            max-width: 600px;
-        }
-        .content h2 {
-            font-size: 35px;
-        }
-        .content p {
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-            font-size: 22px;
-            margin-top: 10px;
-            line-height: 25px;
-        } */
         a {
             color: #fff;
         }
@@ -109,12 +96,12 @@
            margin-top: 10px;
             display: inline-block;
             padding: 12px 24px;
-            background-color: #000000;
+            background-color: #a10033;
             color: white;
             text-align: center;
             text-decoration: none;
             font-size: 16px;
-            border: 2px solid white;
+            border: 2px solid black;
             border-radius: 5px;
             cursor: pointer;
             outline: none;
@@ -152,7 +139,7 @@
 
         <!-- News Container -->
         <div class="news-container">
-            <h1>Latest Guardian News Headlines</h1>
+            <h1>Latest NYTimes News Headlines</h1>
             <ul id="news-list"></ul>
             <a href="realtime-SA.html"><button class="button">Go back</button></a>
         </div>
@@ -160,25 +147,26 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const apiKey = '4c73a5e6-93d1-4051-8e96-933b8d4fa06b';
-            const url = `https://content.guardianapis.com/search?api-key=${apiKey}`;
+      document.addEventListener("DOMContentLoaded", function() {
+            const apiKey = 'LMv5Elsw8GmMHGOhyr3MQTuSGHNWgxgu'; // Replace with your New York Times API key
+            const url = `https://api.nytimes.com/svc/topstories/v2/home.json?api-key=${apiKey}`;
+            const newsList = document.getElementById('news-list');
 
             async function fetchNews() {
                 try {
                     const response = await fetch(url);
                     const data = await response.json();
-                    const newsList = document.getElementById('news-list');
-                    const articles = data.response.results;
+                    newsList.innerHTML = ''; // Clear the current list
+                    const articles = data.results.slice(0, 10); // Get the first 10 articles
 
                     for (const [index, article] of articles.entries()) {
                         const listItem = document.createElement('li');
                         const link = document.createElement('a');
-                        link.href = article.webUrl; // Set the URL of the article
-                        link.textContent = `${index + 1}. ${article.webTitle}`;
+                        link.href = article.url; // Set the URL of the article
+                        link.textContent = `${index + 1}. ${article.title}`;
                         link.target = '_blank'; // Open the link in a new tab/window
 
-                        const sentiment = await fetchSentiment(article.webTitle);
+                        const sentiment = await fetchSentiment(article.title);
 
                         const sentimentSpan = document.createElement('p');
                         sentimentSpan.textContent = ` - Sentiment: ${sentiment}`;

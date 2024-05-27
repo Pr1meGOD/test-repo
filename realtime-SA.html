@@ -4,98 +4,128 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Real Time News Feed Sentiment Analysis</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Karla:wght@300;400;500;600;700&display=swap');
+        * {
+            background-color: black;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Karla', sans-serif;
+        }
+        body {
+            color: #fff;
+        }
+        .container {
+            width: 100%;
+            height: 100vh;
+            background-position: center;
+            background-size: cover;
+            padding-top: 35px;
+            padding-left: 8%;
+            padding-right: 8%;
+
+        }
+        nav {
+            margin-top: -7.5px;
+            padding: 10px 0;
+            margin-right: 112px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            font-size: 33px;
+            text-decoration: none;
+        }
+        span {
+            color: #f9004d;
+        }
+        nav ul li {
+            display: inline-block;
+            font-size: 16px;
+            list-style: none;
+            margin: 10px 30px;
+        }
+        nav ul li a {
+            text-decoration: none;
+            transition: 0.5s;
+        }
+        nav ul li a:hover {
+            color: #f9004d;
+        }
+        .dropdown {
+            margin-top: 20%;
+            margin-left: 38%;
+           
+        }
+        select {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            color: black;
+           background-color: white; 
+        }
+        option{
+            background-color: white;
+        }
+        .content {
+            margin-top: 10%;
+            max-width: 600px;
+        }
+        .content h2 {
+            font-size: 35px;
+        }
+        .content p {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: 22px;
+            margin-top: 10px;
+            line-height: 25px;
+        }
+        a {
+            color: #fff;
+        }
+    </style>
 </head>
 <body>
-   <!--- navbar html-->
+    <!--- navbar html-->
     <div class="container">
         <nav>
             <div class="logo">
-              <b>SENTIMENT<span> ANALYSIS</span></b>
+                <b>SENTIMENT<span> ANALYSIS</span></b>
             </div>
             <ul>
-              <li><a href="Home-SA.html">Home</a></li>
-              <li><a href="basic-SA.html" target="_blank">Basic Sentiment Analysis</a></li>
-              <li><a href="realtime-SA.html" target="_blank">Real Time News Feed Sentiment Analysis</a></li>
+                <li><a href="Home-SA.html">Home</a></li>
+                <li><a href="basic-SA.html" target="_blank">Basic Sentiment Analysis</a></li>
+                <li><a href="realtime-SA.html" target="_blank">Real Time News Feed Sentiment Analysis</a></li>
             </ul>
-          </nav>
-          <br><br>
+        </nav>
+        <br><br>
+
+        <!-- Dropdown for selecting news source -->
+        <div class="dropdown">
+            <label for="news-select">Choose a news source:</label>
+            <select id="news-select">
+                <option value="">Select a news source</option>
+                <option value="guardian-news">Guardian News</option>
+                <option value="cnn-news">CNN News</option>
+                <option value="bbc-news">BBC News</option>
+                <option value="nytimes-news">New York Times News</option>
+            </select>
+        </div>
     </div>
 
-    
-    <!-- -----------------old style------------------- -->
-  
-    <style>
-@import url('https://fonts.googleapis.com/css2?family=Karla:wght@300;400;500;600;700&display=swap');
-*{
- background-color: black;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Karla', sans-serif;
-
-}
-body{
-  color: #fff;
-}
-.container{
-  width: 100%;
-  height: 100vh;
-  background-position: center;
-  background-size: cover;
-  padding-top: 35px;
-  padding-left: 8%;
-  padding-right: 8%;
-}
- nav{
-  margin-top: -7.5px;
-  padding: 10px 0; 
- margin-right: 112px; 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-} 
-.logo {
-  font-size: 33px;
-  text-decoration: none;
- 
-}
-span{
-  color: #f9004d;
-}
-nav ul li{
-  display: inline-block;
-  font-size: 16px;
-  list-style: none;
-  margin: 10px 30px;
-}
-nav ul li a{
-  text-decoration: none;
-  transition: 0.5s;
-
-}
-nav ul li a:hover{
-  color: #f9004d;
-}
-.content{
-  margin-top: 10%;
-  max-width: 600px;
-}
-.content h2{
-  font-size: 35px
-}
-.content p{
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-size: 22px;
-  margin-top: 10px;
-  line-height: 25px;
-}
-a{
-  color: #fff;
-}
-
-  </style>
-
-
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const select = document.getElementById('news-select');
+            select.addEventListener('change', function() {
+                const selectedOption = select.value;
+                if (selectedOption) {
+                    window.location.href = `${selectedOption}.html`;
+                }
+            });
+        });
+    </script>
 </body>
 </html>

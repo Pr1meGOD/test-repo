@@ -139,7 +139,7 @@
 
         <!-- News Container -->
         <div class="news-container">
-            <h1>Latest NYTimes News Headlines</h1>
+            <h1>Latest CNN News Headlines</h1>
             <ul id="news-list"></ul>
             <a href="realtime-SA.html"><button class="button">Go back</button></a>
         </div>
@@ -147,24 +147,22 @@
     </div>
 
     <script>
+
       document.addEventListener("DOMContentLoaded", function() {
-            const apiKey = 'LMv5Elsw8GmMHGOhyr3MQTuSGHNWgxgu'; // Replace with your New York Times API key
-            const url = `https://api.nytimes.com/svc/topstories/v2/home.json?api-key=${apiKey}`;
             const newsList = document.getElementById('news-list');
 
             async function fetchNews() {
                 try {
-                    const response = await fetch(url);
+                    const response = await fetch('https://d9f4fa9e-3fa6-4f0b-b050-b51c3e8240b1-00-j383xofmnrq5.sisko.replit.dev/cnn-news');
                     const data = await response.json();
                     newsList.innerHTML = ''; // Clear the current list
-                    const articles = data.results.slice(0, 10); // Get the first 10 articles
 
-                    for (const [index, article] of articles.entries()) {
+                    for (const [index, article] of data.entries()) {
                         const listItem = document.createElement('li');
                         const link = document.createElement('a');
-                        link.href = article.url; // Set the URL of the article
+                        link.href = article.link;
                         link.textContent = `${index + 1}. ${article.title}`;
-                        link.target = '_blank'; // Open the link in a new tab/window
+                        link.target = '_blank'; // Open the link in a new tab
 
                         const sentiment = await fetchSentiment(article.title);
 
@@ -204,6 +202,7 @@
             // Set interval to fetch news every 5 minutes (300,000 milliseconds)
             setInterval(fetchNews, 300000); // Adjust the interval as needed
         });
+
     </script>
 
 <br>
@@ -215,6 +214,5 @@
 <br><br>
 
 </body>
-
 
 </html>

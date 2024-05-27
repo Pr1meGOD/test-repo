@@ -166,7 +166,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                         const sentiment = await fetchSentiment(article.title);
 
-                        const sentimentSpan = document.createElement('span');
+                        const sentimentSpan = document.createElement('p');
                         sentimentSpan.textContent = ` - Sentiment: ${sentiment}`;
 
                         listItem.appendChild(link);

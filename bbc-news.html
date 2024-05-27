@@ -3,95 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BBC News Headlines</title>
+    <title>BBC NEWS</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+        @import url('https://fonts.googleapis.com/css2?family=Karla:wght@300;400;500;600;700&display=swap');
+        * {
+            background-color: black;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            box-sizing: border-box;
+            font-family: 'Karla', sans-serif;
         }
-
+        body {
+            color: #fff;
+        }
         .container {
-            background-color: #fff;
-            display: block;
+            width: 100%;
+            height: 100vh;
+            background-position: center;
+            background-size: cover;
+            padding-top: 35px;
+            padding-left: 8%;
+            padding-right: 8%;
+        }
+        nav {
+            margin-top: -7.5px;
+            padding: 10px 0;
+            margin-right: 112px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            font-size: 33px;
+            text-decoration: none;
+        }
+        #analysis{
+            color: #f9004d;
+        }
+        nav ul li {
+            display: inline-block;
+            font-size: 16px;
+            list-style: none;
+            margin: 10px 30px;
+        }
+        nav ul li a {
+            text-decoration: none;
+            transition: 0.5s;
+        }
+        nav ul li a:hover {
+            color: #f9004d;
+        }
+        a {
+            color: #fff;
+        }
+        .news-container {
+            border: 2px solid white;
+            
+            color: white;
             padding: 20px;
             border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
         }
-
-        h1 {
+        .news-container h1 {
             font-size: 24px;
             margin-bottom: 20px;
+            color: white;
         }
-
-        ul {
+        .news-container ul {
             list-style: none;
             padding: 0;
         }
-
-        li {
-            background: #e2e2e2;
+        .news-container li {
+            background-color: #696969;
+            color: white;
             margin: 10px 0;
             padding: 10px;
             border-radius: 3px;
         }
-
-        a {
+        .news-container a {
             text-decoration: none;
-            color: #000;
+            background-color: #696969;
+            color: white;
         }
-
-        a:hover {
+        .news-container a:hover {
             text-decoration: underline;
         }
+        .button {
+           margin-top: 10px;
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #a10033;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            border: 2px solid black;
+            border-radius: 5px;
+            cursor: pointer;
+            outline: none;
+            transition: background-color 0.4s, transform 0.4s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .button:hover {
+            background-color: #585858;
+            transform: translateY(-0.5px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+        }
+        .button:focus {
+            outline: none;
+            
+        }
+        p{
+            background-color: #696969;
+        }
     </style>
-
-<style>
-    /* Button styling */
-    .button {
-        display: inline-block;
-        padding: 12px 24px;
-        background-color: #000000; /* black */
-        color: white;
-        text-align: center;
-        text-decoration: none;
-        font-size: 16px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        outline: none;
-        transition: background-color 0.4s, transform 0.4s;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Button hover effect */
-    .button:hover {
-        background-color: #585858; /* Darker green */
-        transform: translateY(-0.5px);
-        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Button focus effect */
-    .button:focus {
-        outline: none;
-    }
-</style>
 </head>
 <body>
-
+    <!--- Navbar HTML --->
     <div class="container">
-        <h1>Latest BBC News Headlines</h1>
-        <ul id="news-list"></ul>
-        <a href="back_button.html"><button class="button">Go back</button></a>
+        <nav>
+            <div class="logo">
+                <b>SENTIMENT<span id="analysis"> ANALYSIS</span></b>
+            </div>
+            <ul>
+                <li><a href="Home-SA.html">Home</a></li>
+                <li><a href="basic-SA.html" target="_blank">Basic Sentiment Analysis</a></li>
+                <li><a href="realtime-SA.html" target="_blank">Real Time News Feed Sentiment Analysis</a></li>
+            </ul>
+        </nav>
+        <br><br>
+
+        <!-- News Container -->
+        <div class="news-container">
+            <h1>Latest BBC News Headlines</h1>
+            <ul id="news-list"></ul>
+            <a href="realtime-SA.html"><button class="button">Go back</button></a>
+        </div>
+
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+
+document.addEventListener("DOMContentLoaded", function() {
             const newsList = document.getElementById('news-list');
 
             async function fetchNews() {
@@ -109,7 +166,7 @@
 
                         const sentiment = await fetchSentiment(article.title);
 
-                        const sentimentSpan = document.createElement('span');
+                        const sentimentSpan = document.createElement('p');
                         sentimentSpan.textContent = ` - Sentiment: ${sentiment}`;
 
                         listItem.appendChild(link);
@@ -145,7 +202,17 @@
             // Set interval to fetch news every 5 minutes (300,000 milliseconds)
             setInterval(fetchNews, 300000); // Adjust the interval as needed
         });
+
     </script>
-     
+
+<br>
+<br><br>
+<br><br>
+<br><br>
+<br>
+<br><br>
+<br><br>
+
 </body>
+
 </html>

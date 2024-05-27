@@ -37,7 +37,7 @@
             font-size: 33px;
             text-decoration: none;
         }
-        span {
+        #analysis{
             color: #f9004d;
         }
         nav ul li {
@@ -70,13 +70,14 @@
             color: #fff;
         }
         .news-container {
+            border: 2px solid white;
             background-color: black;
             color: white;
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             margin-top: 20px;
-            max-width: 800px;
+            max-width: 1000px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -90,14 +91,15 @@
             padding: 0;
         }
         .news-container li {
-            background: #e2e2e2;
+            background: #343a40;
+            color: white;
             margin: 10px 0;
             padding: 10px;
             border-radius: 3px;
         }
         .news-container a {
             text-decoration: none;
-            color: #000;
+            color: white;
         }
         .news-container a:hover {
             text-decoration: underline;
@@ -132,7 +134,7 @@
     <div class="container">
         <nav>
             <div class="logo">
-                <b>SENTIMENT<span> ANALYSIS</span></b>
+                <b>SENTIMENT<span id="analysis"> ANALYSIS</span></b>
             </div>
             <ul>
                 <li><a href="Home-SA.html">Home</a></li>

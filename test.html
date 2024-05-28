@@ -1,218 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real Time News Feed Sentiment Analysis</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Karla:wght@300;400;500;600;700&display=swap');
-        * {
-            background-color: black;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Karla', sans-serif;
-        }
-        body {
-            color: #fff;
-        }
-        .container {
-            width: 100%;
-            height: 100vh;
-            background-position: center;
-            background-size: cover;
-            padding-top: 35px;
-            padding-left: 8%;
-            padding-right: 8%;
-        }
-        nav {
-            margin-top: -7.5px;
-            padding: 10px 0;
-            margin-right: 112px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .logo {
-            font-size: 33px;
-            text-decoration: none;
-        }
-        #analysis{
-            color: #f9004d;
-        }
-        nav ul li {
-            display: inline-block;
-            font-size: 16px;
-            list-style: none;
-            margin: 10px 30px;
-        }
-        nav ul li a {
-            text-decoration: none;
-            transition: 0.5s;
-        }
-        nav ul li a:hover {
-            color: #f9004d;
-        }
-        a {
-            color: #fff;
-        }
-        .news-container {
-            border: 2px solid white;
-            
-            color: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-            max-width: 1000px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .news-container h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: white;
-        }
-        .news-container ul {
-            list-style: none;
-            padding: 0;
-        }
-        .news-container li {
-            background-color: #696969;
-            color: white;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 3px;
-        }
-        .news-container a {
-            text-decoration: none;
-            background-color: #696969;
-            color: white;
-        }
-        .news-container a:hover {
-            text-decoration: underline;
-        }
-        .button {
-           margin-top: 10px;
-            display: inline-block;
-            padding: 12px 24px;
-            background-color: #a10033;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            font-size: 16px;
-            border: 2px solid black;
-            border-radius: 5px;
-            cursor: pointer;
-            outline: none;
-            transition: background-color 0.4s, transform 0.4s;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .button:hover {
-            background-color: #585858;
-            transform: translateY(-0.5px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
-        }
-        .button:focus {
-            outline: none;
-            
-        }
-        p{
-            background-color: #696969;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>News Sentiment Analysis</title>
 </head>
 <body>
-    <!--- Navbar HTML --->
-    <div class="container">
-        <nav>
-            <div class="logo">
-                <b>SENTIMENT<span id="analysis"> ANALYSIS</span></b>
-            </div>
-            <ul>
-                <li><a href="Home-SA.html">Home</a></li>
-                <li><a href="basic-SA.html" target="_blank">Basic Sentiment Analysis</a></li>
-                <li><a href="realtime-SA.html" target="_blank">Real Time News Feed Sentiment Analysis</a></li>
-            </ul>
-        </nav>
-        <br><br>
+  <h1>News Sentiment Analysis</h1>
+  <input type="text" id="newsWebsite" placeholder="Enter news website name">
+  <button onclick="fetchHeadlines()">Get News</button>
+  <div id="results"></div>
 
-        <!-- News Container -->
-        <div class="news-container">
-            <h1>Latest CNN News Headlines</h1>
-            <ul id="news-list"></ul>
-            <a href="realtime-SA.html"><button class="button">Go back</button></a>
-        </div>
+  <script>
+    async function fetchHeadlines() {
+      const name = document.getElementById('newsWebsite').value;
+      const response = await fetch(`/news-headlines/${name}`);
+      const data = await response.json();
 
-    </div>
-
-    <script>
-
-document.addEventListener("DOMContentLoaded", function() {
-            const newsList = document.getElementById('news-list');
-
-            async function fetchNews() {
-                try {
-                    const response = await fetch('https://89febbf8-d6a1-4780-879b-8b71759c38cf-00-8oy4ua4jq8xu.sisko.replit.dev/news');
-                    const data = await response.json();
-                    newsList.innerHTML = ''; // Clear the current list
-
-                    for (const [index, article] of data.entries()) {
-                        const listItem = document.createElement('li');
-                        const link = document.createElement('a');
-                        link.href = article.link;
-                        link.textContent = `${index + 1}. ${article.title}`;
-                        link.target = '_blank'; // Open the link in a new tab
-
-                        const sentiment = await fetchSentiment(article.title);
-
-                        const sentimentSpan = document.createElement('p');
-                        sentimentSpan.textContent = ` - Sentiment: ${sentiment}`;
-
-                        listItem.appendChild(link);
-                        listItem.appendChild(sentimentSpan);
-                        newsList.appendChild(listItem);
-                    }
-                } catch (error) {
-                    console.error('Error fetching news:', error);
-                }
-            }
-
-            async function fetchSentiment(title) {
-                try {
-                    const response = await fetch('https://xhkc56io19.execute-api.us-east-1.amazonaws.com/dev', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ text: title })
-                    });
-                    const result = await response.json();
-                    const sentimentData = JSON.parse(result.body);
-                    return sentimentData.sentiment;
-                } catch (error) {
-                    console.error('Error fetching sentiment:', error);
-                    return 'N/A';
-                }
-            }
-
-            // Fetch news initially when the page loads
-            fetchNews();
-
-            // Set interval to fetch news every 5 minutes (300,000 milliseconds)
-            setInterval(fetchNews, 300000); // Adjust the interval as needed
-        });
-
-    </script>
-
-<br>
-<br><br>
-<br><br>
-<br><br>
-<br>
-<br><br>
-<br><br>
-
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = data.map(item => `
+        <p>${item.headline} - Sentiment Score: ${item.sentiment.score}</p>
+      `).join('');
+    }
+  </script>
 </body>
-
 </html>

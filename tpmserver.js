@@ -43,30 +43,23 @@ import('node-fetch').then(async ({ default: fetch }) => {
             const response = await fetch(apiUrl);
             const data = await response.json();
 
+            let articles;
             if ((website === 'cnn-news' || website === 'bbc-news') && data.status === 'ok') {
-                const articles = data.articles;
-                const newsHeadlines = articles.map(article => ({
-                    title: article.title,
-                    link: article.url
-                }));
-                res.json(newsHeadlines);
+                articles = data.articles.slice(0, 10);
             } else if (website === 'guardian-news' && data.response.status === 'ok') {
-                const articles = data.response.results;
-                const newsHeadlines = articles.map(article => ({
-                    title: article.webTitle,
-                    link: article.webUrl
-                }));
-                res.json(newsHeadlines);
+                articles = data.response.results.slice(0, 10);
             } else if (website === 'nytimes-news' && data.status === 'OK') {
-                const articles = data.results;
-                const newsHeadlines = articles.map(article => ({
-                    title: article.title,
-                    link: article.url
-                }));
-                res.json(newsHeadlines);
+                articles = data.results.slice(0, 10);
             } else {
                 throw new Error(`Failed to fetch news headlines from ${website}`);
             }
+
+            const newsHeadlines = articles.map(article => ({
+                title: website === 'guardian-news' ? article.webTitle : article.title,
+                link: website === 'guardian-news' ? article.webUrl : article.url
+            }));
+
+            res.json(newsHeadlines);
         } catch (error) {
             console.error('Error fetching news headlines:', error);
             res.status(500).json({ error: 'Failed to fetch news headlines' });
@@ -79,4 +72,5 @@ import('node-fetch').then(async ({ default: fetch }) => {
 }).catch(error => {
     console.error('Error importing node-fetch:', error);
 });
+
 

@@ -12,11 +12,14 @@
     <script>
         async function fetchHeadlines() {
             try {
+                console.log('Fetching headlines...');
                 const response = await fetch('http://localhost:3000/news');
+                console.log('Response received:', response);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 const newsHeadlines = await response.json();
+                console.log('Parsed JSON:', newsHeadlines);
 
                 const headlinesList = document.getElementById('news-headlines');
                 headlinesList.innerHTML = ''; // Clear any existing headlines

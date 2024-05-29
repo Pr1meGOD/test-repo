@@ -21,11 +21,11 @@
                     const newsList = document.getElementById('news-list');
                     newsList.innerHTML = '';
 
-                    data.forEach(article => {
+                    data.forEach((article, index) => {
                         const listItem = document.createElement('li');
                         const link = document.createElement('a');
                         link.href = article.link;
-                        link.textContent = article.title;
+                        link.textContent = `${index + 1}) ${article.title}`; // Prefix with index number
                         link.target = '_blank'; // Open link in new tab
                         listItem.appendChild(link);
                         newsList.appendChild(listItem);
@@ -42,6 +42,7 @@
     </script>
 </body>
 </html>
+
 
 
 

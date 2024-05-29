@@ -23,7 +23,7 @@ async function fetchHeadlines() {
                 console.error('Error parsing XML:', err);
                 throw err;
             }
-            headlines = result.rss.channel[0].item.map(item => ({
+            headlines = result.rss.channel[0].item.slice(0, 10).map(item => ({
                 title: item.title[0],
                 link: item.link[0]
             }));
@@ -36,7 +36,7 @@ async function fetchHeadlines() {
     }
 }
 
-// API endpoint to fetch news headlines from Times of India RSS feed
+// API endpoint to fetch top 10 news headlines from Times of India RSS feed
 app.get('/news', async (req, res) => {
     try {
         const headlines = await fetchHeadlines();
@@ -50,6 +50,7 @@ app.get('/news', async (req, res) => {
 app.listen(port, () => {
     console.log(`Backend server running at http://localhost:${port}`);
 });
+
 
 
 

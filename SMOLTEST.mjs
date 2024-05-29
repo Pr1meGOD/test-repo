@@ -8,7 +8,8 @@ const port = 3000;
 // Middleware to enable CORS
 app.use(cors());
 
-const apiKey = 'e43b1ad8b17d40d8bb3ea4fbda65c06e'; // Replace with your NewsAPI key
+// API key for NewsAPI
+const apiKey = 'YOUR_NEWSAPI_API_KEY'; // Replace with your NewsAPI key
 
 // Function to fetch top news headlines from Times of India
 async function fetchHeadlines() {
@@ -17,7 +18,7 @@ async function fetchHeadlines() {
         const query_params = {
             sources: 'the-times-of-india',
             pageSize: 10,
-            apiKey: apiKey
+            apiKey: e43b1ad8b17d40d8bb3ea4fbda65c06e
         };
 
         // Fetching data from NewsAPI
@@ -50,6 +51,7 @@ app.get('/news', async (req, res) => {
 app.listen(port, () => {
     console.log(`Backend server running at http://localhost:${port}`);
 });
+
 
 
 

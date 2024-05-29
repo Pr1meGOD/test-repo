@@ -19,7 +19,7 @@ app.get('/news', async (req, res) => {
         const response = await axios.get('https://www.hindustantimes.com');
         const html = response.data;
         const $ = cheerio.load(html);
-        
+
         // Select the top 10 headlines
         const headlines = [];
         $('div[data-hrpnl="latestnews"] h2 a').each((index, element) => {
@@ -29,6 +29,8 @@ app.get('/news', async (req, res) => {
                 headlines.push({ title, link });
             }
         });
+
+        console.log('Extracted headlines:', headlines); // Log extracted headlines
 
         // Perform sentiment analysis on the headlines
         const newsHeadlines = await Promise.all(headlines.map(async ({ title, link }) => {

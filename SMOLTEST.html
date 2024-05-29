@@ -12,31 +12,18 @@
     <script>
         async function fetchHeadlines() {
             try {
-                console.log('Fetching headlines...');
                 const response = await fetch('http://localhost:3000/news');
-                console.log('Response received:', response);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 const newsHeadlines = await response.json();
-                console.log('Parsed JSON:', newsHeadlines);
 
                 const headlinesList = document.getElementById('news-headlines');
                 headlinesList.innerHTML = ''; // Clear any existing headlines
 
-                newsHeadlines.forEach(headline => {
+                newsHeadlines.forEach((headline, index) => {
                     const listItem = document.createElement('li');
-                    const link = document.createElement('a');
-                    link.href = headline.link;
-                    link.textContent = headline.title;
-                    link.target = '_blank';
-
-                    const sentiment = document.createElement('span');
-                    sentiment.textContent = ` (Sentiment: ${headline.sentiment})`;
-                    sentiment.style.marginLeft = '10px';
-
-                    listItem.appendChild(link);
-                    listItem.appendChild(sentiment);
+                    listItem.textContent = `${index + 1}. ${headline}`;
                     headlinesList.appendChild(listItem);
                 });
             } catch (error) {
@@ -51,4 +38,5 @@
     </script>
 </body>
 </html>
+
 

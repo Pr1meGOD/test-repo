@@ -1,65 +1,67 @@
 import express from 'express';
 import axios from 'axios';
-import xml2js from 'xml2js';
+import cors from 'cors';
+import { parseString } from 'xml2js';
 
 const app = express();
 const port = 3000;
 
 // Middleware to enable CORS
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', '*');
-    res.setHeader('Access-Control-Allow-Headers', '*');
-    next();
-});
+app.use(cors());
 
-// API endpoint to fetch news headlines from Hindustan Times RSS feed
-app.get('/news', async (req, res) => {
+// Function to fetch headlines from RSS feed
+async function fetchHeadlines(feedUrl) {
     try {
-        const feedUrl = 'https://www.hindustantimes.com/rss';
-        const response = await axios.get(feedUrl, { responseType: 'text' });
-        const feedData = response.data;
+        const response = await axios.get(feedUrl);
+        const xmlData = response.data;
 
-        // Parse the RSS feed using xml2js
-        xml2js.parseString(feedData, { trim: true, explicitArray: false }, async (err, result) => {
+        let headlines = [];
+
+        // Parse XML data
+        parseString(xmlData, { trim: true }, (err, result) => {
             if (err) {
                 throw new Error(`Failed to parse RSS feed: ${err.message}`);
             }
-
-            // Extract articles from the parsed feed
-            const articles = result.rss.channel.item.slice(0, 10); // Get the top 10 articles
-
-            const newsHeadlines = await Promise.all(articles.map(async article => {
-                const title = article.title;
-                const link = article.link;
-                const sentiment = await getSentiment(title);
-                return { title, link, sentiment };
-            }));
-
-            res.json(newsHeadlines);
+            const items = result.rss.channel[0].item;
+            headlines = items.map(item => item.title[0]);
         });
+
+        return headlines;
+    } catch (error) {
+        console.error('Error fetching headlines:', error.message);
+        throw error;
+    }
+}
+
+// API endpoint to fetch news headlines from multiple RSS feeds
+app.get('/news', async (req, res) => {
+    try {
+        const feedUrls = [
+            'https://www.hindustantimes.com/feeds/rss/brand-stories/international/rssfeed.xml',
+            'https://www.hindustantimes.com/feeds/rss/analysis/rssfeed.xml',
+            'https://www.hindustantimes.com/feeds/rss/business/rssfeed.xml'
+        ];
+
+        // Fetch headlines from all feeds asynchronously
+        const promises = feedUrls.map(url => fetchHeadlines(url));
+        const results = await Promise.all(promises);
+
+        // Flatten the array of arrays into a single array of headlines
+        const headlines = results.flat();
+
+        // Sending the headlines as JSON response
+        res.json(headlines);
     } catch (error) {
         console.error('Error fetching news headlines:', error.message);
         res.status(500).json({ error: 'Failed to fetch news headlines' });
     }
 });
 
-// Function to perform sentiment analysis
-async function getSentiment(title) {
-    try {
-        const sentimentAPI = 'https://c6a7zwwwyj.execute-api.us-east-1.amazonaws.com/devv';
-        const response = await axios.post(sentimentAPI, { text: title });
-        const sentiment = response.data.sentiment;
-        return sentiment;
-    } catch (error) {
-        console.error('Error fetching sentiment:', error.message);
-        return 'N/A';
-    }
-}
-
 app.listen(port, () => {
     console.log(`Backend server running at http://localhost:${port}`);
 });
+
+
 
 
 

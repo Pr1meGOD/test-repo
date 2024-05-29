@@ -8,6 +8,7 @@
     "mongoose": "^8.4.0",
     "node-fetch": "^3.3.2",
     "rss-parser": "^3.13.0",
+    "xml2js": "^0.6.2",
     "xmldom": "^0.6.0"
   },
   "name": "test-repo",

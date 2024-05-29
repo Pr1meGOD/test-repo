@@ -1,10 +1,9 @@
 import express from 'express';
 import axios from 'axios';
-import Parser from 'rss-parser';
+import xml2js from 'xml2js';
 
 const app = express();
 const port = 3000;
-const parser = new Parser();
 
 // Middleware to enable CORS
 app.use((req, res, next) => {
@@ -17,27 +16,28 @@ app.use((req, res, next) => {
 // API endpoint to fetch news headlines from Hindustan Times RSS feed
 app.get('/news', async (req, res) => {
     try {
-        // Fetch the RSS feed
         const feedUrl = 'https://www.hindustantimes.com/rss';
-        const feed = await parser.parseURL(feedUrl);
+        const response = await axios.get(feedUrl, { responseType: 'text' });
+        const feedData = response.data;
 
-        // Log feed for debugging
-        console.log('Fetched feed:', feed);
+        // Parse the RSS feed using xml2js
+        xml2js.parseString(feedData, { trim: true, explicitArray: false }, async (err, result) => {
+            if (err) {
+                throw new Error(`Failed to parse RSS feed: ${err.message}`);
+            }
 
-        // Extract the top 10 articles
-        const articles = feed.items.slice(0, 10);
+            // Extract articles from the parsed feed
+            const articles = result.rss.channel.item.slice(0, 10); // Get the top 10 articles
 
-        // Log articles for debugging
-        console.log('Extracted articles:', articles);
+            const newsHeadlines = await Promise.all(articles.map(async article => {
+                const title = article.title;
+                const link = article.link;
+                const sentiment = await getSentiment(title);
+                return { title, link, sentiment };
+            }));
 
-        const newsHeadlines = await Promise.all(articles.map(async article => {
-            const title = article.title;
-            const link = article.link;
-            const sentiment = await getSentiment(title);
-            return { title, link, sentiment };
-        }));
-
-        res.json(newsHeadlines);
+            res.json(newsHeadlines);
+        });
     } catch (error) {
         console.error('Error fetching news headlines:', error.message);
         res.status(500).json({ error: 'Failed to fetch news headlines' });
@@ -60,6 +60,7 @@ async function getSentiment(title) {
 app.listen(port, () => {
     console.log(`Backend server running at http://localhost:${port}`);
 });
+
 
 
 

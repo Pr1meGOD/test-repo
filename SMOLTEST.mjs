@@ -18,12 +18,12 @@ async function fetchHeadlines(feedUrl) {
         let headlines = [];
 
         // Parse XML data
-        parseString(xmlData, { trim: true }, (err, result) => {
+        parseString(xmlData, { trim: true, explicitArray: false }, (err, result) => {
             if (err) {
                 throw new Error(`Failed to parse RSS feed: ${err.message}`);
             }
-            const items = result.rss.channel[0].item;
-            headlines = items.map(item => item.title[0]);
+            const items = result.rss.channel.item;
+            headlines = items.map(item => item.title);
         });
 
         return headlines;
@@ -60,6 +60,7 @@ app.get('/news', async (req, res) => {
 app.listen(port, () => {
     console.log(`Backend server running at http://localhost:${port}`);
 });
+
 
 
 

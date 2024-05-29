@@ -12,11 +12,12 @@ app.use((req, res, next) => {
     next();
 });
 
-// API endpoint to fetch news headlines from Hindustan Times
+// API endpoint to fetch news headlines
 app.get('/news', async (req, res) => {
     try {
-        const apiKey = 'e43b1ad8b17d40d8bb3ea4fbda65c06e';
-        const response = await axios.get(`https://newsapi.org/v2/top-headlines?sources=hindustan-times&apiKey=${apiKey}`);
+        const apiKey = 'YOUR_NEWSAPI_API_KEY';
+        // Fetch news articles mentioning "Hindustan Times"
+        const response = await axios.get(`https://newsapi.org/v2/everything?q=Hindustan Times&apiKey=${apiKey}`);
         const data = response.data;
 
         if (data.status === 'ok') {
@@ -29,7 +30,7 @@ app.get('/news', async (req, res) => {
             }));
             res.json(newsHeadlines);
         } else {
-            throw new Error('Failed to fetch news headlines from Hindustan Times');
+            throw new Error('Failed to fetch news headlines');
         }
     } catch (error) {
         console.error('Error fetching news headlines:', error);
@@ -53,5 +54,4 @@ async function getSentiment(title) {
 app.listen(port, () => {
     console.log(`Backend server running at http://localhost:${port}`);
 });
-
 

@@ -4,117 +4,91 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Times of India News Headlines</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            padding: 20px;
-        }
-        #news-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            font-size: 24px;
-            color: #333;
-            margin-bottom: 20px;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            margin-bottom: 10px;
-        }
-        a {
-            text-decoration: none;
-            color: #007bff;
-            transition: color 0.3s ease;
-        }
-        a:hover {
-            color: #0056b3;
-        }
-    </style>
 </head>
 <body>
-    <div id="news-container">
-        <h1>Times of India News Headlines</h1>
-        <ul id="news-list"></ul>
+    <!-- Navbar HTML -->
+    <div class="container">
+        <nav>
+            <div class="logo">
+                <b>SENTIMENT<span id="analysis"> ANALYSIS</span></b>
+            </div>
+            <ul>
+                <li><a href="Home-SA.html">Home</a></li>
+                <li><a href="basic-SA.html" target="_blank">Basic Sentiment Analysis</a></li>
+                <li><a href="realtime-SA.html" target="_blank">Real Time News Feed Sentiment Analysis</a></li>
+            </ul>
+        </nav>
+        <br><br>
+
+        <!-- News Container -->
+        <div class="news-container">
+            <h1>Latest Times of India News Headlines</h1>
+            <ul id="news-list"></ul>
+            <a href="realtime-SA.html"><button class="button">Go back</button></a>
+        </div>
+
     </div>
 
     <script>
-        
-        // Function to fetch news headlines from the backend
-async function fetchNews() {
-    try {
-        const response = await fetch('http://localhost:3000/news');
-        const newsHeadlines = await response.json();
-        
-        // Clear previous headlines
-        const newsContainer = document.getElementById('news-container');
-        newsContainer.innerHTML = '';
+        document.addEventListener("DOMContentLoaded", function() {
+            const newsList = document.getElementById('news-list');
 
-        // Iterate through each news headline and display
-        newsHeadlines.forEach(async (headline, index) => {
-            const { title, link } = headline;
+            async function fetchNews() {
+                try {
+                    const response = await fetch('http://localhost:3000/toi-news'); // Backend endpoint
+                    const data = await response.json();
+                    newsList.innerHTML = ''; // Clear the current list
 
-            // Fetch sentiment for the current headline
-            const sentiment = await fetchSentiment(title);
+                    data.forEach(async (article, index) => {
+                        const listItem = document.createElement('li');
+                        const link = document.createElement('a');
+                        link.href = article.link;
+                        link.textContent = `${index + 1}. ${article.title}`;
+                        link.target = '_blank'; // Open the link in a new tab
 
-            // Create a new headline element
-            const headlineElement = document.createElement('div');
-            headlineElement.classList.add('headline');
-            headlineElement.innerHTML = `<span>${index + 1}) ${title}</span>`;
+                        const sentiment = await fetchSentiment(article.title);
 
-            // Append sentiment if available
-            if (sentiment !== 'N/A') {
-                headlineElement.innerHTML += `<br><span>Sentiment: ${sentiment}</span>`;
+                        const sentimentSpan = document.createElement('p');
+                        sentimentSpan.textContent = ` - Sentiment: ${sentiment}`;
+
+                        listItem.appendChild(link);
+                        listItem.appendChild(sentimentSpan);
+                        newsList.appendChild(listItem);
+                    });
+                } catch (error) {
+                    console.error('Error fetching news:', error);
+                }
             }
 
-            // Create a link to the full article
-            const linkElement = document.createElement('a');
-            linkElement.href = link;
-            linkElement.target = '_blank';
-            linkElement.textContent = 'Read more';
-            headlineElement.appendChild(linkElement);
+            async function fetchSentiment(title) {
+                try {
+                    const response = await fetch('https://xhkc56io19.execute-api.us-east-1.amazonaws.com/dev', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ text: title })
+                    });
+                    const result = await response.json();
+                    const sentimentData = JSON.parse(result.body);
+                    return sentimentData.sentiment;
+                } catch (error) {
+                    console.error('Error fetching sentiment:', error);
+                    return 'N/A';
+                }
+            }
 
-            // Append headline to the news container
-            newsContainer.appendChild(headlineElement);
+            // Fetch news initially when the page loads
+            fetchNews();
+
+            // Set interval to fetch news every 5 minutes (300,000 milliseconds)
+            setInterval(fetchNews, 300000); // Adjust the interval as needed
         });
-    } catch (error) {
-        console.error('Error fetching news:', error);
-    }
-}
-
-// Function to fetch sentiment analysis
-async function fetchSentiment(title) {
-    try {
-        const response = await fetch('https://xhkc56io19.execute-api.us-east-1.amazonaws.com/dev', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ text: title })
-        });
-        const result = await response.json();
-        const sentimentData = JSON.parse(result.body);
-        return sentimentData.sentiment;
-    } catch (error) {
-        console.error('Error fetching sentiment:', error);
-        return 'N/A';
-    }
-}
-
-// Fetch news headlines when the page loads
-document.addEventListener('DOMContentLoaded', fetchNews);
-
     </script>
+
 </body>
 </html>
+
 
 
 

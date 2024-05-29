@@ -20,9 +20,12 @@ app.get('/news', async (req, res) => {
         const html = response.data;
         const $ = cheerio.load(html);
 
+        // Log the HTML content for debugging
+        console.log('Fetched HTML:', html.substring(0, 1000)); // Log first 1000 chars of HTML
+
         // Select the top 10 headlines
         const headlines = [];
-        $('div[data-hrpnl="latestnews"] h2 a').each((index, element) => {
+        $('div[data-hrpnl="latestnews"] h3 a').each((index, element) => {
             if (index < 10) {
                 const title = $(element).text();
                 const link = $(element).attr('href');
@@ -30,7 +33,8 @@ app.get('/news', async (req, res) => {
             }
         });
 
-        console.log('Extracted headlines:', headlines); // Log extracted headlines
+        // Log extracted headlines
+        console.log('Extracted headlines:', headlines);
 
         // Perform sentiment analysis on the headlines
         const newsHeadlines = await Promise.all(headlines.map(async ({ title, link }) => {
@@ -61,3 +65,4 @@ async function getSentiment(title) {
 app.listen(port, () => {
     console.log(`Backend server running at http://localhost:${port}`);
 });
+

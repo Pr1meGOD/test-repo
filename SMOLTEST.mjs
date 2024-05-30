@@ -1,6 +1,7 @@
 import express from 'express';
 import fetch from 'node-fetch';
 import { parseStringPromise } from 'xml2js';
+import axios from 'axios';
 
 const app = express();
 const port = 3000;
@@ -28,10 +29,23 @@ app.get('/ht-india-news', async (req, res) => {
         const newsHeadlines = items.slice(0, 10).map((item, index) => ({
             title: item.title[0],
             link: item.link[0],
-            number: index + 1
+            sentiment: 'N/A' // Placeholder for sentiment analysis, replace as needed
         }));
 
-        res.json(newsHeadlines); // Sending the array of headlines as JSON response
+        // Fetching sentiment for each headline asynchronously
+        const newsWithSentiment = await Promise.all(newsHeadlines.map(async (headline) => {
+            try {
+                const sentimentAPI = 'https://xhkc56io19.execute-api.us-east-1.amazonaws.com/dev';
+                const response = await axios.post(sentimentAPI, { text: headline.title });
+                const sentiment = response.data.sentiment;
+                headline.sentiment = sentiment;
+            } catch (error) {
+                console.error('Error fetching sentiment:', error);
+            }
+            return headline;
+        }));
+
+        res.json(newsWithSentiment); // Sending the array of headlines with sentiment as JSON response
     } catch (error) {
         console.error('Error fetching news headlines:', error);
         res.status(500).json({ error: 'Failed to fetch news headlines' });

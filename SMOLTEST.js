@@ -1,6 +1,6 @@
-const express = require('express');
-const fetch = require('node-fetch');
-const { parseStringPromise } = require('xml2js');
+import express from 'express';
+import fetch from 'node-fetch';
+import { parseStringPromise } from 'xml2js';
 
 const app = express();
 const port = 3000;
@@ -41,6 +41,8 @@ app.get('/ht-india-news', async (req, res) => {
 app.listen(port, () => {
     console.log(`Backend server running at http://localhost:${port}`);
 });
+
+
 
 
 

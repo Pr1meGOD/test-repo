@@ -107,13 +107,11 @@
                     const data = await response.json();
                     newsList.innerHTML = ''; // Clear the current list
 
-                    for (let index = 0; index < data.length; index++) {
-                        const article = data[index];
-
+                    for (const article of data) {
                         const listItem = document.createElement('li');
                         const link = document.createElement('a');
                         link.href = article.link;
-                        link.textContent = `${index + 1}. ${article.title}`;
+                        link.textContent = article.title; // No numbering here
                         link.target = '_blank'; // Open the link in a new tab
 
                         const sentiment = await fetchSentiment(article.title);
@@ -157,6 +155,7 @@
     </script>
 </body>
 </html>
+
 
 
 

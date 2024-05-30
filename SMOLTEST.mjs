@@ -25,11 +25,11 @@ app.get('/ht-mumbai-news', async (req, res) => {
         if (rssData.rss && rssData.rss.channel && rssData.rss.channel[0].item) {
             const articles = rssData.rss.channel[0].item.slice(0, 10); // Limit to top 10 articles
             const newsHeadlines = await Promise.all(
-                articles.map(async (article, index) => {
+                articles.map(async (article) => {
                     const title = article.title[0];
                     const link = article.link[0];
                     const sentiment = await getSentiment(title);
-                    return { title: `${index + 1}. ${title}`, link, sentiment };
+                    return { title, link, sentiment };
                 })
             );
             res.json(newsHeadlines);
@@ -58,5 +58,6 @@ async function getSentiment(title) {
 app.listen(port, () => {
     console.log(`Backend server running at http://localhost:${port}`);
 });
+
 
 

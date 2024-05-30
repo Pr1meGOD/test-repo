@@ -1,17 +1,18 @@
 {
+  "type": "module",
   "dependencies": {
     "aws-sdk": "^2.1603.0",
-    "axios": "^1.7.2",
+    "axios": "^0.21.1",
     "cheerio": "^1.0.0-rc.12",
     "cors": "^2.8.5",
-    "express": "^4.19.2",
+    "express": "^4.17.1",
     "fetch": "^1.1.0",
     "jsdom": "^24.0.0",
     "mongoose": "^8.4.0",
-    "node-fetch": "^3.3.2",
+    "node-fetch": "^3.0.0",
     "require": "^2.4.20",
     "rss-parser": "^3.13.0",
-    "xml2js": "^0.6.2",
+    "xml2js": "^0.4.23",
     "xmldom": "^0.6.0"
   },
   "name": "test-repo",

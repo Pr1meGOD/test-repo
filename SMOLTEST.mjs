@@ -19,6 +19,9 @@ app.get('/ht-mumbai-news', async (req, res) => {
     try {
         const rssUrl = 'https://www.hindustantimes.com/feeds/rss/cities/mumbai-news/rssfeed.xml';
         const response = await fetch(rssUrl);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch RSS feed: ${response.statusText}`);
+        }
         const rssText = await response.text();
 
         const rssData = await parseStringPromise(rssText, {
@@ -40,10 +43,10 @@ app.get('/ht-mumbai-news', async (req, res) => {
             );
             res.json(newsHeadlines);
         } else {
-            throw new Error('Failed to fetch news headlines from Hindustan Times Mumbai');
+            throw new Error('No news articles found in the RSS feed');
         }
     } catch (error) {
-        console.error('Error fetching news headlines:', error);
+        console.error('Error fetching news headlines:', error.message);
         res.status(500).json({ error: 'Failed to fetch news headlines' });
     }
 });
@@ -56,7 +59,7 @@ async function getSentiment(title) {
         const sentiment = response.data.sentiment;
         return sentiment;
     } catch (error) {
-        console.error('Error fetching sentiment:', error);
+        console.error('Error fetching sentiment:', error.message);
         return 'N/A';
     }
 }
@@ -64,6 +67,7 @@ async function getSentiment(title) {
 app.listen(port, () => {
     console.log(`Backend server running at http://localhost:${port}`);
 });
+
 
 
 

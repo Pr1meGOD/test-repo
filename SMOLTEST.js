@@ -1,6 +1,5 @@
 import express from 'express';
 import fetch from 'node-fetch';
-import axios from 'axios';
 import { parseStringPromise } from 'xml2js';
 
 const app = express();
@@ -26,9 +25,10 @@ app.get('/ht-india-news', async (req, res) => {
         const items = parsedData.rss.channel[0].item;
 
         // Extracting the top 10 headlines
-        const newsHeadlines = items.slice(0, 10).map(item => ({
+        const newsHeadlines = items.slice(0, 10).map((item, index) => ({
             title: item.title[0],
-            link: item.link[0]
+            link: item.link[0],
+            number: index + 1
         }));
 
         res.json(newsHeadlines); // Sending the array of headlines as JSON response

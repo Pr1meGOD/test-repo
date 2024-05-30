@@ -3,74 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hindustan Times News Headlines</title>
+    <title>Top News Headlines</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            line-height: 1.6;
-            padding: 20px;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
         }
         ul {
             list-style-type: none;
             padding: 0;
         }
         li {
-            margin-bottom: 10px;
+            background: #f4f4f4;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
         }
         a {
             text-decoration: none;
-            color: #333;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        p {
-            margin: 5px 0;
+            color: #007BFF;
         }
     </style>
 </head>
 <body>
-    <h1>Top 10 Hindustan Times News Headlines</h1>
-    <ul id="news-list"></ul>
+    <h1>Top 10 News Headlines</h1>
+    <ul id="news-headlines"></ul>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const newsList = document.getElementById('news-list');
-
-            async function fetchNews() {
-                try {
-                    const response = await fetch('http://localhost:3000/ht-news'); // Backend endpoint
-                    const data = await response.json();
-                    newsList.innerHTML = ''; // Clear the current list
-
-                    data.forEach(article => {
-                        const listItem = document.createElement('li');
-                        const link = document.createElement('a');
-                        link.href = article.link;
-                        link.textContent = `${article.number}. ${article.title}`;
-                        link.target = '_blank'; // Open the link in a new tab
-
-                        const sentimentSpan = document.createElement('p');
-                        sentimentSpan.textContent = ` - Sentiment: ${article.sentiment}`;
-
-                        listItem.appendChild(link);
-                        listItem.appendChild(sentimentSpan);
-                        newsList.appendChild(listItem);
-                    });
-                } catch (error) {
-                    console.error('Error fetching news:', error);
-                }
+        async function fetchNews() {
+            try {
+                const response = await fetch('http://localhost:3000/news');
+                const headlines = await response.json();
+                
+                const headlinesList = document.getElementById('news-headlines');
+                headlines.forEach(news => {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.href = news.link;
+                    a.textContent = news.title;
+                    a.target = '_blank';
+                    li.appendChild(a);
+                    headlinesList.appendChild(li);
+                });
+            } catch (error) {
+                console.error('Error fetching news:', error);
             }
+        }
 
-            // Fetch news initially when the page loads
-            fetchNews();
-
-            // Set interval to fetch news every 5 minutes (300,000 milliseconds)
-            setInterval(fetchNews, 300000); // Adjust the interval as needed
-        });
+        fetchNews();
     </script>
 </body>
 </html>
+
 
 
 

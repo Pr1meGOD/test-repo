@@ -9,6 +9,7 @@
     "jsdom": "^24.0.0",
     "mongoose": "^8.4.0",
     "node-fetch": "^3.3.2",
+    "require": "^2.4.20",
     "rss-parser": "^3.13.0",
     "xml2js": "^0.6.2",
     "xmldom": "^0.6.0"

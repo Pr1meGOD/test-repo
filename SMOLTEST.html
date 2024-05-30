@@ -3,26 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hindustan Times India News</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 20px;
-        }
-        .news-item {
-            margin-bottom: 10px;
-        }
-    </style>
+    <title>News Headlines</title>
 </head>
 <body>
-    <div class="container">
-        <h1>Hindustan Times India News Headlines</h1>
-        <ul id="news-list"></ul>
-    </div>
+    <h1>Top 10 News Headlines</h1>
+    <ul id="news-list"></ul>
 
     <script>
-        document.addEventListener('DOMContentLoaded', async function() {
+        document.addEventListener("DOMContentLoaded", function() {
             const newsList = document.getElementById('news-list');
 
             async function fetchNews() {
@@ -31,14 +19,18 @@
                     const data = await response.json();
                     newsList.innerHTML = ''; // Clear the current list
 
-                    data.forEach(article => {
+                    data.forEach((article, index) => {
                         const listItem = document.createElement('li');
                         const link = document.createElement('a');
                         link.href = article.link;
-                        link.textContent = `${article.number}. ${article.title}`;
+                        link.textContent = `${index + 1}. ${article.title}`;
                         link.target = '_blank'; // Open the link in a new tab
 
+                        const sentimentSpan = document.createElement('p');
+                        sentimentSpan.textContent = ` - Sentiment: ${article.sentiment}`;
+
                         listItem.appendChild(link);
+                        listItem.appendChild(sentimentSpan);
                         newsList.appendChild(listItem);
                     });
                 } catch (error) {
@@ -55,6 +47,7 @@
     </script>
 </body>
 </html>
+
 
 
 

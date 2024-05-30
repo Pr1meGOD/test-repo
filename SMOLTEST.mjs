@@ -14,59 +14,34 @@ app.use((req, res, next) => {
     next();
 });
 
-// API endpoint to fetch news headlines from Hindustan Times Mumbai RSS feed
-app.get('/ht-mumbai-news', async (req, res) => {
+// API endpoint to fetch news headlines from Hindustan Times India RSS feed
+app.get('/ht-india-news', async (req, res) => {
     try {
-        const rssUrl = 'https://www.hindustantimes.com/feeds/rss/cities/mumbai-news/rssfeed.xml';
-        const response = await fetch(rssUrl);
-        if (!response.ok) {
-            throw new Error(`Failed to fetch RSS feed: ${response.statusText}`);
-        }
-        const rssText = await response.text();
+        const rssFeedUrl = 'https://www.hindustantimes.com/feeds/rss/india-news/rssfeed.xml';
+        const response = await fetch(rssFeedUrl);
+        const xmlData = await response.text();
 
-        const rssData = await parseStringPromise(rssText, {
-            trim: true,
-            normalizeTags: true,
-            explicitArray: false,
-            mergeAttrs: true,
-        });
+        // Parse XML to JSON
+        const parsedData = await parseStringPromise(xmlData);
+        const items = parsedData.rss.channel[0].item;
 
-        if (rssData.rss && rssData.rss.channel && rssData.rss.channel.item) {
-            const articles = Array.isArray(rssData.rss.channel.item) ? rssData.rss.channel.item.slice(0, 10) : [rssData.rss.channel.item];
-            const newsHeadlines = await Promise.all(
-                articles.map(async (article, index) => {
-                    const title = article.title;
-                    const link = article.link;
-                    const sentiment = await getSentiment(title);
-                    return { title: `${index + 1}. ${title}`, link, sentiment };
-                })
-            );
-            res.json(newsHeadlines);
-        } else {
-            throw new Error('No news articles found in the RSS feed');
-        }
+        // Extracting the top 10 headlines
+        const newsHeadlines = items.slice(0, 10).map(item => ({
+            title: item.title[0],
+            link: item.link[0]
+        }));
+
+        res.json(newsHeadlines);
     } catch (error) {
-        console.error('Error fetching news headlines:', error.message);
+        console.error('Error fetching news headlines:', error);
         res.status(500).json({ error: 'Failed to fetch news headlines' });
     }
 });
 
-// Function to perform sentiment analysis
-async function getSentiment(title) {
-    try {
-        const sentimentAPI = 'https://xhkc56io19.execute-api.us-east-1.amazonaws.com/dev';
-        const response = await axios.post(sentimentAPI, { text: title });
-        const sentiment = response.data.sentiment;
-        return sentiment;
-    } catch (error) {
-        console.error('Error fetching sentiment:', error.message);
-        return 'N/A';
-    }
-}
-
 app.listen(port, () => {
     console.log(`Backend server running at http://localhost:${port}`);
 });
+
 
 
 

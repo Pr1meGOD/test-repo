@@ -3,77 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HT Mumbai News</title>
+    <title>Hindustan Times India News</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f0f0f0;
+            line-height: 1.6;
+            margin: 20px;
         }
-        .container {
-            margin: auto;
-            max-width: 800px;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .news-container {
-            margin-top: 20px;
-        }
-        .news-container h1 {
-            margin-bottom: 20px;
-        }
-        .news-container ul {
-            list-style: none;
-            padding: 0;
-        }
-        .news-container ul li {
+        .news-item {
             margin-bottom: 10px;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 10px;
-        }
-        .news-container ul li a {
-            font-weight: bold;
-            color: #333;
-            text-decoration: none;
-        }
-        .news-container ul li p {
-            margin: 5px 0 0;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="news-container">
-            <h1>Latest Hindustan Times Mumbai News Headlines</h1>
-            <ul id="news-list"></ul>
-        </div>
+        <h1>Hindustan Times India News Headlines</h1>
+        <ul id="news-list"></ul>
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             const newsList = document.getElementById('news-list');
 
             async function fetchNews() {
                 try {
-                    const response = await fetch('http://localhost:3000/ht-mumbai-news'); // Backend endpoint
+                    const response = await fetch('http://localhost:3000/ht-india-news'); // Backend endpoint
                     const data = await response.json();
                     newsList.innerHTML = ''; // Clear the current list
 
-                    data.forEach((article) => {
+                    data.forEach((article, index) => {
                         const listItem = document.createElement('li');
                         const link = document.createElement('a');
                         link.href = article.link;
-                        link.textContent = article.title; // Title with numbering from backend
+                        link.textContent = article.title;
                         link.target = '_blank'; // Open the link in a new tab
 
-                        const sentimentSpan = document.createElement('p');
-                        sentimentSpan.textContent = ` - Sentiment: ${article.sentiment}`;
-
                         listItem.appendChild(link);
-                        listItem.appendChild(sentimentSpan);
                         newsList.appendChild(listItem);
                     });
                 } catch (error) {
@@ -90,6 +55,7 @@
     </script>
 </body>
 </html>
+
 
 
 

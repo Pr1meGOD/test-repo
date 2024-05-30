@@ -62,11 +62,11 @@
                     const data = await response.json();
                     newsList.innerHTML = ''; // Clear the current list
 
-                    data.forEach(async (article, index) => {
+                    data.forEach(async (article) => {
                         const listItem = document.createElement('li');
                         const link = document.createElement('a');
                         link.href = article.link;
-                        link.textContent = `${index + 1}. ${article.title}`; // Add numbering here
+                        link.textContent = article.title; // Title with numbering from backend
                         link.target = '_blank'; // Open the link in a new tab
 
                         const sentiment = await fetchSentiment(article.title);
@@ -110,3 +110,4 @@
     </script>
 </body>
 </html>
+

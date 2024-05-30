@@ -21,16 +21,22 @@ app.get('/ht-mumbai-news', async (req, res) => {
         const response = await fetch(rssUrl);
         const rssText = await response.text();
 
-        const rssData = await parseStringPromise(rssText, { trim: true, normalizeTags: true });
+        // Ensure proper XML parsing with a parser that can handle potential issues
+        const rssData = await parseStringPromise(rssText, {
+            trim: true,
+            normalizeTags: true,
+            explicitArray: false,
+            mergeAttrs: true,
+        });
 
-        if (rssData.rss && rssData.rss.channel && rssData.rss.channel[0].item) {
-            const articles = rssData.rss.channel[0].item.slice(0, 10); // Limit to top 10 articles
+        if (rssData.rss && rssData.rss.channel && rssData.rss.channel.item) {
+            const articles = rssData.rss.channel.item.slice(0, 10); // Limit to top 10 articles
             const newsHeadlines = await Promise.all(
-                articles.map(async (article) => {
-                    const title = article.title[0];
-                    const link = article.link[0];
+                articles.map(async (article, index) => {
+                    const title = article.title;
+                    const link = article.link;
                     const sentiment = await getSentiment(title);
-                    return { title, link, sentiment };
+                    return { title: `${index + 1}. ${title}`, link, sentiment };
                 })
             );
             res.json(newsHeadlines);
@@ -59,6 +65,7 @@ async function getSentiment(title) {
 app.listen(port, () => {
     console.log(`Backend server running at http://localhost:${port}`);
 });
+
 
 
 

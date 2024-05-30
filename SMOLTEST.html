@@ -4,9 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>News Headlines</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+        }
+    </style>
 </head>
 <body>
-    <h1>Top 10 News Headlines</h1>
+    <h1>Hindustan Times India News</h1>
     <ul id="news-list"></ul>
 
     <script>
@@ -15,24 +27,29 @@
 
             async function fetchNews() {
                 try {
-                    const response = await fetch('http://localhost:3000/ht-india-news'); // Backend endpoint
+                    const response = await fetch('http://localhost:3000/ht-india-news');
                     const data = await response.json();
-                    newsList.innerHTML = ''; // Clear the current list
 
-                    data.forEach((article, index) => {
-                        const listItem = document.createElement('li');
-                        const link = document.createElement('a');
-                        link.href = article.link;
-                        link.textContent = `${article.number}. ${article.title}`;
-                        link.target = '_blank'; // Open the link in a new tab
+                    if (response.ok) {
+                        newsList.innerHTML = ''; // Clear the current list
 
-                        const sentimentSpan = document.createElement('p');
-                        sentimentSpan.textContent = ` - Sentiment: ${article.sentiment}`;
+                        data.forEach((article, index) => {
+                            const listItem = document.createElement('li');
+                            const link = document.createElement('a');
+                            link.href = article.link;
+                            link.textContent = `${article.number}. ${article.title}`;
+                            link.target = '_blank'; // Open the link in a new tab
 
-                        listItem.appendChild(link);
-                        listItem.appendChild(sentimentSpan);
-                        newsList.appendChild(listItem);
-                    });
+                            const sentimentSpan = document.createElement('p');
+                            sentimentSpan.textContent = ` - Sentiment: ${article.sentiment}`;
+
+                            listItem.appendChild(link);
+                            listItem.appendChild(sentimentSpan);
+                            newsList.appendChild(listItem);
+                        });
+                    } else {
+                        console.error('Error fetching news:', data.error);
+                    }
                 } catch (error) {
                     console.error('Error fetching news:', error);
                 }
@@ -47,6 +64,7 @@
     </script>
 </body>
 </html>
+
 
 
 

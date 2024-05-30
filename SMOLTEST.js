@@ -1,7 +1,7 @@
 import express from 'express';
+import fetch from 'node-fetch';
 import { parseStringPromise } from 'xml2js';
 import axios from 'axios';
-import fetch from 'node-fetch';
 
 const app = express();
 const port = 3000;
@@ -20,6 +20,9 @@ app.get('/ht-india-news', async (req, res) => {
         const rssFeedUrl = 'https://www.hindustantimes.com/feeds/rss/india-news/rssfeed.xml';
         const response = await fetch(rssFeedUrl);
         const xmlData = await response.text();
+
+        // Log the raw XML data to debug any issues with the XML structure
+        console.log('Fetched XML Data:', xmlData);
 
         // Parse XML to JSON
         const parsedData = await parseStringPromise(xmlData);
@@ -56,6 +59,7 @@ async function getSentiment(title) {
 app.listen(port, () => {
     console.log(`Backend server running at http://localhost:${port}`);
 });
+
 
 
 

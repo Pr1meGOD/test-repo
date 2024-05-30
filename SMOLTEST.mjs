@@ -1,7 +1,7 @@
 import express from 'express';
 import fetch from 'node-fetch';
-import { parseStringPromise } from 'xml2js';
 import axios from 'axios';
+import { parseStringPromise } from 'xml2js';
 
 const app = express();
 const port = 3000;
@@ -21,7 +21,6 @@ app.get('/ht-mumbai-news', async (req, res) => {
         const response = await fetch(rssUrl);
         const rssText = await response.text();
 
-        // Ensure proper XML parsing with a parser that can handle potential issues
         const rssData = await parseStringPromise(rssText, {
             trim: true,
             normalizeTags: true,
@@ -65,6 +64,8 @@ async function getSentiment(title) {
 app.listen(port, () => {
     console.log(`Backend server running at http://localhost:${port}`);
 });
+
+
 
 
 

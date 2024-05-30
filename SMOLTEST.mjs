@@ -31,7 +31,7 @@ app.get('/ht-india-news', async (req, res) => {
             link: item.link[0]
         }));
 
-        res.json(newsHeadlines);
+        res.json(newsHeadlines); // Sending the array of headlines as JSON response
     } catch (error) {
         console.error('Error fetching news headlines:', error);
         res.status(500).json({ error: 'Failed to fetch news headlines' });
@@ -41,16 +41,6 @@ app.get('/ht-india-news', async (req, res) => {
 app.listen(port, () => {
     console.log(`Backend server running at http://localhost:${port}`);
 });
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -39,11 +39,11 @@
                 const headlines = await response.json();
                 
                 const headlinesList = document.getElementById('news-headlines');
-                headlines.forEach(news => {
+                headlines.forEach((news, index) => {
                     const li = document.createElement('li');
                     const a = document.createElement('a');
                     a.href = news.link;
-                    a.textContent = news.title;
+                    a.textContent = `${index + 1}) ${news.title}`;
                     a.target = '_blank';
                     li.appendChild(a);
                     headlinesList.appendChild(li);
@@ -57,6 +57,7 @@
     </script>
 </body>
 </html>
+
 
 
 

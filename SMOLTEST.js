@@ -1,7 +1,7 @@
-const express = require('express');
-const fetch = require('node-fetch');
-const { parseStringPromise } = require('xml2js');
-const axios = require('axios');
+import express from 'express';
+import { parseStringPromise } from 'xml2js';
+import axios from 'axios';
+import fetch from 'node-fetch';
 
 const app = express();
 const port = 3000;

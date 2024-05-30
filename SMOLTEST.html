@@ -23,7 +23,7 @@
                         const listItem = document.createElement('li');
                         const link = document.createElement('a');
                         link.href = article.link;
-                        link.textContent = `${index + 1}. ${article.title}`;
+                        link.textContent = `${article.number}. ${article.title}`;
                         link.target = '_blank'; // Open the link in a new tab
 
                         const sentimentSpan = document.createElement('p');
@@ -47,6 +47,7 @@
     </script>
 </body>
 </html>
+
 
 
 

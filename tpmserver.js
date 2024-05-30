@@ -1,5 +1,6 @@
 import('node-fetch').then(async ({ default: fetch }) => {
     const express = require('express');
+    const parseString = require('xml2js').parseString;
 
     const app = express();
     const port = 3000;
@@ -36,12 +37,24 @@ import('node-fetch').then(async ({ default: fetch }) => {
                 apiUrl = `https://content.guardianapis.com/search?api-key=${guardianApiKey}`;
             } else if (website === 'nytimes-news') {
                 apiUrl = `https://api.nytimes.com/svc/topstories/v2/home.json?api-key=${nytimesApiKey}`;
+            } else if (website === 'toi-news') {
+                apiUrl = `https://timesofindia.indiatimes.com/rssfeedstopstories.cms`;
             } else {
                 return res.status(400).json({ error: 'Unsupported website' });
             }
 
             const response = await fetch(apiUrl);
-            const data = await response.json();
+
+            let data;
+            if (website === 'toi-news') {
+                const xmlText = await response.text();
+                parseString(xmlText, (err, result) => {
+                    if (err) throw err;
+                    data = result.rss.channel[0].item.slice(0, 10); // Limit to top 10 headlines
+                });
+            } else {
+                data = await response.json();
+            }
 
             let articles;
             if ((website === 'cnn-news' || website === 'bbc-news') && data.status === 'ok') {
@@ -50,6 +63,11 @@ import('node-fetch').then(async ({ default: fetch }) => {
                 articles = data.response.results.slice(0, 10);
             } else if (website === 'nytimes-news' && data.status === 'OK') {
                 articles = data.results.slice(0, 10);
+            } else if (website === 'toi-news' && data.length > 0) {
+                articles = data.map(item => ({
+                    title: item.title[0],
+                    link: item.link[0]
+                }));
             } else {
                 throw new Error(`Failed to fetch news headlines from ${website}`);
             }

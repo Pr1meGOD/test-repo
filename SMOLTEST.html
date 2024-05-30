@@ -31,21 +31,16 @@
                     const data = await response.json();
                     newsList.innerHTML = ''; // Clear the current list
 
-                    // Ensure data is an array
-                    if (Array.isArray(data)) {
-                        data.forEach((article, index) => {
-                            const listItem = document.createElement('li');
-                            const link = document.createElement('a');
-                            link.href = article.link;
-                            link.textContent = article.title;
-                            link.target = '_blank'; // Open the link in a new tab
+                    data.forEach(article => {
+                        const listItem = document.createElement('li');
+                        const link = document.createElement('a');
+                        link.href = article.link;
+                        link.textContent = `${article.number}. ${article.title}`;
+                        link.target = '_blank'; // Open the link in a new tab
 
-                            listItem.appendChild(link);
-                            newsList.appendChild(listItem);
-                        });
-                    } else {
-                        console.error('Invalid data format:', data);
-                    }
+                        listItem.appendChild(link);
+                        newsList.appendChild(listItem);
+                    });
                 } catch (error) {
                     console.error('Error fetching news:', error);
                 }
@@ -60,6 +55,7 @@
     </script>
 </body>
 </html>
+
 
 
 

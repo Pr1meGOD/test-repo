@@ -6,135 +6,107 @@
     <title>News Sentiment Analysis</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
         .container {
             max-width: 800px;
-            margin: 0 auto;
+            width: 100%;
             padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
         }
-        .header {
+        h1 {
             text-align: center;
-            margin-bottom: 20px;
+            color: #333;
         }
-        .header h1 {
-            font-size: 2em;
-            color: #444;
-        }
-        .header p {
-            color: #666;
-        }
-        .input-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        .input-container input {
-            width: 70%;
+        input[type="text"] {
+            width: calc(100% - 22px);
             padding: 10px;
-            font-size: 1em;
-            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
             border-radius: 4px;
-            margin-right: 10px;
         }
-        .input-container button {
-            padding: 10px 20px;
-            font-size: 1em;
+        button {
+            width: 100%;
+            padding: 10px;
             background-color: #007bff;
-            color: white;
             border: none;
+            color: white;
+            font-size: 16px;
             border-radius: 4px;
             cursor: pointer;
         }
-        .input-container button:hover {
+        button:hover {
             background-color: #0056b3;
         }
-        .news-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 4px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .news-container h2 {
-            font-size: 1.5em;
-            margin-bottom: 20px;
-        }
-        .news-container ul {
-            list-style: none;
+        ul {
+            list-style-type: none;
             padding: 0;
         }
-        .news-container li {
+        li {
+            background-color: #f9f9f9;
             padding: 10px;
-            border-bottom: 1px solid #eee;
-        }
-        .news-container li:last-child {
-            border-bottom: none;
-        }
-        .news-container a {
-            color: #007bff;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .news-container a:hover {
-            text-decoration: underline;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
         .sentiment {
-            color: #666;
-            margin-top: 5px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>News Sentiment Analysis</h1>
-            <p>Get the latest news headlines and their sentiment analysis.</p>
-        </div>
-        <div class="input-container">
-            <input type="text" id="news-website" placeholder="Enter news website (e.g., cnn-news, bbc-news, guardian-news, nytimes-news, toi-news, ht-news)">
-            <button onclick="fetchNews()">Search</button>
-        </div>
-        <div class="news-container">
-            <h2>Latest News Headlines</h2>
-            <ul id="news-list"></ul>
-        </div>
+        <h1>News Sentiment Analysis</h1>
+        <input type="text" id="website" placeholder="Enter website (e.g., cnn-news, bbc-news, guardian-news, nytimes-news, toi-news, ht-news)">
+        <button onclick="fetchNews()">Fetch News</button>
+        <ul id="news-list"></ul>
     </div>
 
     <script>
         async function fetchNews() {
-            const newsWebsite = document.getElementById('news-website').value;
-            const newsList = document.getElementById('news-list');
-
-            if (!newsWebsite) {
-                alert('Please enter a news website');
+            const website = document.getElementById('website').value.trim();
+            if (!website) {
+                alert('Please enter a website.');
                 return;
             }
 
             try {
-                const response = await fetch(`http://localhost:3000/news?website=${newsWebsite}`);
+                const response = await fetch(`http://localhost:3000/news?website=${website}`);
                 const data = await response.json();
+                
+                const newsList = document.getElementById('news-list');
                 newsList.innerHTML = ''; // Clear the current list
 
-                for (const [index, article] of data.entries()) {
-                    const listItem = document.createElement('li');
-                    const link = document.createElement('a');
-                    link.href = article.link;
-                    link.textContent = `${index + 1}. ${article.title}`;
-                    link.target = '_blank'; // Open the link in a new tab
+                if (response.ok) {
+                    for (const [index, article] of data.entries()) {
+                        const listItem = document.createElement('li');
+                        const link = document.createElement('a');
+                        link.href = article.link;
+                        link.textContent = `${index + 1}. ${article.title}`;
+                        link.target = '_blank'; // Open the link in a new tab
 
-                    const sentiment = await fetchSentiment(article.title);
+                        const sentiment = await fetchSentiment(article.title);
 
-                    const sentimentSpan = document.createElement('div');
-                    sentimentSpan.className = 'sentiment';
-                    sentimentSpan.textContent = `Sentiment: ${sentiment}`;
+                        const sentimentSpan = document.createElement('span');
+                        sentimentSpan.className = 'sentiment';
+                        sentimentSpan.textContent = ` - Sentiment: ${sentiment}`;
 
-                    listItem.appendChild(link);
-                    listItem.appendChild(sentimentSpan);
-                    newsList.appendChild(listItem);
+                        listItem.appendChild(link);
+                        listItem.appendChild(sentimentSpan);
+                        newsList.appendChild(listItem);
+                    }
+                } else {
+                    newsList.innerHTML = `<li>Error: ${data.error}</li>`;
                 }
             } catch (error) {
                 console.error('Error fetching news:', error);
@@ -161,6 +133,7 @@
     </script>
 </body>
 </html>
+
 
 
 

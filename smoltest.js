@@ -35,7 +35,7 @@ app.get('/news', async (req, res) => {
             apiUrl = `https://api.nytimes.com/svc/topstories/v2/home.json?api-key=${nytimesApiKey}`;
         } else if (website === 'toi-news') {
             apiUrl = `https://timesofindia.indiatimes.com/rssfeedstopstories.cms`;
-        } else if (website === 'hindustan-times') {
+        } else if (website === 'ht-news') {
             apiUrl = `https://www.hindustantimes.com/feeds/rss/india-news/rssfeed.xml`;
         } else {
             return res.status(400).json({ error: 'Unsupported website' });
@@ -43,7 +43,7 @@ app.get('/news', async (req, res) => {
 
         let articles = [];
 
-        if (website === 'hindustan-times') {
+        if (website === 'ht-news') {
             const response = await axios.get(apiUrl);
             const xml = response.data;
             parseString(xml, async (err, result) => {

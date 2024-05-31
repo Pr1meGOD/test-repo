@@ -1,5 +1,8 @@
+
 {
-  "type": "module",
+  
+    "type": "module",
+  
   "dependencies": {
     "aws-sdk": "^2.1603.0",
     "axios": "^0.21.4",

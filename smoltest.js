@@ -45,7 +45,7 @@ app.get('/news', async (req, res) => {
         } else if (website === 'hindustan-times') {
             const response = await fetch('https://www.hindustantimes.com/feeds/rss/india-news/rssfeed.xml');
             const xml = await response.text();
-            const result = await parseString(xml);
+            const result = parseString(xml);
             const items = result.rss.channel[0].item.slice(0, 10);
             const headlines = items.map(item => ({
                 title: item.title[0],

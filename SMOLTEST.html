@@ -39,6 +39,25 @@
             margin-top: 10px;
             font-weight: bold;
         }
+        #search-bar {
+            padding: 10px;
+            width: 80%;
+            max-width: 400px;
+            margin: 20px auto;
+            display: block;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #search-button {
+            padding: 10px 20px;
+            margin: 10px auto;
+            display: block;
+            border: none;
+            background-color: #333;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -46,20 +65,18 @@
         <h1>News Sentiment Analysis</h1>
     </header>
     <main>
-        <select id="news-source">
-            <option value="cnn-news">CNN News</option>
-            <option value="bbc-news">BBC News</option>
-            <option value="guardian-news">The Guardian</option>
-            <option value="nytimes-news">New York Times</option>
-            <option value="toi-news">Times of India</option>
-            <option value="hindustan-times">Hindustan Times</option>
-        </select>
-        <button onclick="fetchNews()">Get News</button>
+        <input type="text" id="search-bar" placeholder="Enter news website (e.g., cnn-news, bbc-news, guardian-news, nytimes-news, toi-news, hindustan-times)">
+        <button id="search-button" onclick="fetchNews()">Get News</button>
         <div id="news-container"></div>
     </main>
     <script>
         async function fetchNews() {
-            const newsSource = document.getElementById('news-source').value;
+            const newsSource = document.getElementById('search-bar').value.trim();
+            if (!newsSource) {
+                alert('Please enter a news website.');
+                return;
+            }
+
             const response = await fetch(`http://localhost:3000/news?website=${newsSource}`);
             const news = await response.json();
             const newsContainer = document.getElementById('news-container');
@@ -86,6 +103,7 @@
     </script>
 </body>
 </html>
+
 
 
 

@@ -7,158 +7,86 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
             margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
+            padding: 0;
+            background-color: #f4f4f4;
             text-align: center;
         }
-        #search-form {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1em 0;
         }
-        #search-form input {
-            width: 70%;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+        main {
+            padding: 20px;
         }
-        #search-form button {
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 4px;
-            background-color: #007BFF;
-            color: #fff;
-            cursor: pointer;
-            margin-left: 10px;
+        .headline {
+            background-color: white;
+            margin: 10px auto;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
         }
-        #search-form button:hover {
-            background-color: #0056b3;
-        }
-        .news-list {
-            list-style: none;
-            padding: 0;
-        }
-        .news-item {
-            background-color: #f9f9f9;
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .news-item a {
+        .headline a {
             text-decoration: none;
-            color: #007BFF;
+            color: #333;
         }
-        .news-item a:hover {
+        .headline a:hover {
             text-decoration: underline;
         }
         .sentiment {
-            font-style: italic;
-            color: #555;
-        }
-        .error {
-            color: red;
             margin-top: 10px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <header>
         <h1>News Sentiment Analysis</h1>
-        <form id="search-form">
-            <input type="text" id="search-input" placeholder="Enter news source (e.g., bbc-news, cnn-news)">
-            <button type="submit">Search</button>
-        </form>
-        <ul id="news-list" class="news-list"></ul>
-        <p id="error" class="error"></p>
-    </div>
-
+    </header>
+    <main>
+        <select id="news-source">
+            <option value="cnn-news">CNN News</option>
+            <option value="bbc-news">BBC News</option>
+            <option value="guardian-news">The Guardian</option>
+            <option value="nytimes-news">New York Times</option>
+            <option value="toi-news">Times of India</option>
+            <option value="hindustan-times">Hindustan Times</option>
+        </select>
+        <button onclick="fetchNews()">Get News</button>
+        <div id="news-container"></div>
+    </main>
     <script>
-        document.getElementById('search-form').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const newsList = document.getElementById('news-list');
-            const query = document.getElementById('search-input').value.trim();
-            
-            if (!query) {
-                document.getElementById('error').textContent = 'Please enter a news source.';
-                newsList.innerHTML = '';
-                return;
-            }
+        async function fetchNews() {
+            const newsSource = document.getElementById('news-source').value;
+            const response = await fetch(`http://localhost:3000/news?website=${newsSource}`);
+            const news = await response.json();
+            const newsContainer = document.getElementById('news-container');
+            newsContainer.innerHTML = '';
 
-            document.getElementById('error').textContent = '';
-            newsList.innerHTML = '<li>Loading...</li>';
+            news.forEach(item => {
+                const headlineDiv = document.createElement('div');
+                headlineDiv.className = 'headline';
+                
+                const titleLink = document.createElement('a');
+                titleLink.href = item.link;
+                titleLink.textContent = item.title;
+                titleLink.target = '_blank';
 
-            try {
-                const response = await fetch(`http://localhost:3000/news?website=${query}`);
-                const data = await response.json();
-                newsList.innerHTML = '';
+                const sentimentDiv = document.createElement('div');
+                sentimentDiv.className = 'sentiment';
+                sentimentDiv.textContent = `Sentiment: ${item.sentiment}`;
 
-                if (data.error) {
-                    newsList.innerHTML = `<li>${data.error}</li>`;
-                    return;
-                }
-
-                // Fetch sentiment for each article
-                const articlesWithSentiment = await Promise.all(data.map(async (article) => {
-                    const sentiment = await getSentiment(article.title);
-                    return { ...article, sentiment };
-                }));
-
-                articlesWithSentiment.forEach(article => {
-                    const listItem = document.createElement('li');
-                    listItem.className = 'news-item';
-                    const link = document.createElement('a');
-                    link.href = article.link;
-                    link.target = '_blank';
-                    link.textContent = article.title;
-
-                    const sentiment = document.createElement('p');
-                    sentiment.className = 'sentiment';
-                    sentiment.textContent = `Sentiment: ${article.sentiment}`;
-
-                    listItem.appendChild(link);
-                    listItem.appendChild(sentiment);
-                    newsList.appendChild(listItem);
-                });
-            } catch (error) {
-                console.error('Error fetching news:', error);
-                newsList.innerHTML = '<li>Error fetching news. Please try again later.</li>';
-            }
-        });
-
-        async function getSentiment(title) {
-            try {
-                const sentimentAPI = "https://xhkc56io19.execute-api.us-east-1.amazonaws.com/dev";
-                const response = await fetch(sentimentAPI, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ text: title })
-                });
-                const sentimentData = await response.json();
-                return sentimentData.sentiment;
-            } catch (error) {
-                console.error('Error fetching sentiment:', error);
-                return 'N/A';
-            }
+                headlineDiv.appendChild(titleLink);
+                headlineDiv.appendChild(sentimentDiv);
+                newsContainer.appendChild(headlineDiv);
+            });
         }
     </script>
 </body>
 </html>
+
 
 
 

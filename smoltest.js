@@ -60,6 +60,14 @@ app.get('/news', async (req, res) => {
                         return { title, link, sentiment };
                     })
                 );
+
+                if (website === 'toi-news') {
+                    articles = articles.map(article => ({
+                        ...article,
+                        link: `https://timesofindia.indiatimes.com${article.link}`
+                    }));
+                }
+
                 res.json(articles);
             });
         } else {
@@ -86,7 +94,7 @@ app.get('/news', async (req, res) => {
                         link = article.webUrl;
                     } else if (website === 'livemint-news') {
                         title = article.title;
-                        link = `${article.link}`;
+                        link = `https://www.livemint.com${article.link}`;
                     } else {
                         title = article.title;
                         link = article.url;
@@ -119,6 +127,7 @@ async function getSentiment(title) {
 app.listen(port, () => {
     console.log(`Backend server running at http://localhost:${port}`);
 });
+
 
 
 

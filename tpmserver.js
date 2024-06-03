@@ -60,6 +60,14 @@ app.get('/news', async (req, res) => {
                         return { title, link, sentiment };
                     })
                 );
+
+                if (website === 'toi-news') {
+                    articles = articles.map(article => ({
+                        ...article,
+                        link: `${article.link}`
+                    }));
+                }
+
                 res.json(articles);
             });
         } else {

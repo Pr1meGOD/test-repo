@@ -80,8 +80,17 @@ app.get('/news', async (req, res) => {
 
             articles = await Promise.all(
                 articles.map(async article => {
-                    const title = website === 'guardian-news' ? article.webTitle : article.title;
-                    const link = website === 'guardian-news' ? article.webUrl : article.url;
+                    let title, link;
+                    if (website === 'guardian-news') {
+                        title = article.webTitle;
+                        link = article.webUrl;
+                    } else if (website === 'livemint-news') {
+                        title = article.title;
+                        link = `https://www.livemint.com${article.link}`;
+                    } else {
+                        title = article.title;
+                        link = article.url;
+                    }
                     const sentiment = await getSentiment(title);
                     return { title, link, sentiment };
                 })
@@ -110,5 +119,6 @@ async function getSentiment(title) {
 app.listen(port, () => {
     console.log(`Backend server running at http://localhost:${port}`);
 });
+
 
 

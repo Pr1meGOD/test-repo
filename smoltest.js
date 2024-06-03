@@ -24,7 +24,6 @@ app.get('/news', async (req, res) => {
     try {
         let apiUrl;
 
-        // Define the API URL based on the provided website
         if (website === 'cnn-news') {
             apiUrl = `https://newsapi.org/v2/top-headlines?sources=cnn&apiKey=${cnnApiKey}`;
         } else if (website === 'bbc-news') {
@@ -111,6 +110,3 @@ async function getSentiment(title) {
 app.listen(port, () => {
     console.log(`Backend server running at http://localhost:${port}`);
 });
-
-
-

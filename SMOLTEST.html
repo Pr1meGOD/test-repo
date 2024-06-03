@@ -90,7 +90,6 @@
             color: #0077b6;
             font-size: 1.1em;
             font-weight: bold;
-            display: block; /* Ensure the entire headline is clickable */
         }
         .headline a:hover {
             text-decoration: underline;
@@ -112,50 +111,46 @@
         <h1>News Sentiment Analysis</h1>
     </header>
     <main>
-        <input type="text" id="search-bar" placeholder="Enter news website (e.g., cnn-news, bbc-news, guardian-news, nytimes-news, toi-news, ht-news, livemint-news)">
-        <button id="search-button">Search</button>
+        <input type="text" id="search-bar" placeholder="Enter news website (e.g., cnn-news, bbc-news, guardian-news, nytimes-news, toi-news, ht-news)">
+        <button id="search-button" onclick="fetchNews()">Get News</button>
         <div id="news-container"></div>
     </main>
     <script>
-        document.getElementById('search-button').addEventListener('click', async () => {
-            const website = document.getElementById('search-bar').value;
+        async function fetchNews() {
+            const newsSource = document.getElementById('search-bar').value.trim();
+            if (!newsSource) {
+                alert('Please enter a news website.');
+                return;
+            }
+
+            const response = await fetch(`http://localhost:3000/news?website=${newsSource}`);
+            const news = await response.json();
             const newsContainer = document.getElementById('news-container');
             newsContainer.innerHTML = '';
 
-            try {
-                const response = await fetch(`http://localhost:3000/news?website=${website}`);
-                const data = await response.json();
+            news.forEach((item, index) => {
+                const headlineDiv = document.createElement('div');
+                headlineDiv.className = 'headline';
+                headlineDiv.setAttribute('data-number', index + 1);
 
-                if (response.ok) {
-                    data.forEach((article, index) => {
-                        const headlineElement = document.createElement('div');
-                        headlineElement.classList.add('headline');
-                        headlineElement.setAttribute('data-number', index + 1);
+                const titleLink = document.createElement('a');
+                titleLink.href = item.link;
+                titleLink.textContent = item.title;
+                titleLink.target = '_blank';
 
-                        const linkElement = document.createElement('a');
-                        linkElement.href = article.link;
-                        linkElement.target = '_blank';
-                        linkElement.textContent = article.title;
+                const sentimentDiv = document.createElement('div');
+                sentimentDiv.className = 'sentiment';
+                sentimentDiv.textContent = `Sentiment: ${item.sentiment}`;
 
-                        const sentimentElement = document.createElement('div');
-                        sentimentElement.classList.add('sentiment');
-                        sentimentElement.textContent = `Sentiment: ${article.sentiment}`;
-
-                        headlineElement.appendChild(linkElement);
-                        headlineElement.appendChild(sentimentElement);
-
-                        newsContainer.appendChild(headlineElement);
-                    });
-                } else {
-                    newsContainer.textContent = `Error: ${data.error}`;
-                }
-            } catch (error) {
-                newsContainer.textContent = `Error: ${error.message}`;
-            }
-        });
+                headlineDiv.appendChild(titleLink);
+                headlineDiv.appendChild(sentimentDiv);
+                newsContainer.appendChild(headlineDiv);
+            });
+        }
     </script>
 </body>
 </html>
+
 
 
 

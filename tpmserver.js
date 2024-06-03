@@ -24,7 +24,6 @@ app.get('/news', async (req, res) => {
     try {
         let apiUrl;
 
-        // Define the API URL based on the provided website
         if (website === 'cnn-news') {
             apiUrl = `https://newsapi.org/v2/top-headlines?sources=cnn&apiKey=${cnnApiKey}`;
         } else if (website === 'bbc-news') {
@@ -37,13 +36,15 @@ app.get('/news', async (req, res) => {
             apiUrl = `https://timesofindia.indiatimes.com/rssfeedstopstories.cms`;
         } else if (website === 'ht-news') {
             apiUrl = `https://www.hindustantimes.com/feeds/rss/india-news/rssfeed.xml`;
+        } else if (website === 'livemint-news') {
+            apiUrl = `https://newsdata.io/api/1/news?apikey=pub_4553266773c7d8f5c57a2944449b3041a19b2&q=https://www.livemint.com/`;
         } else {
             return res.status(400).json({ error: 'Unsupported website' });
         }
 
         let articles = [];
 
-        if (website === 'ht-news') {
+        if (website === 'ht-news' || website === 'toi-news') {
             const response = await axios.get(apiUrl);
             const xml = response.data;
             parseString(xml, async (err, result) => {
@@ -63,16 +64,7 @@ app.get('/news', async (req, res) => {
             });
         } else {
             const response = await fetch(apiUrl);
-            let data;
-            if (website === 'toi-news') {
-                const xmlText = await response.text();
-                parseString(xmlText, (err, result) => {
-                    if (err) throw err;
-                    data = result.rss.channel[0].item.slice(0, 10); // Limit to top 10 headlines
-                });
-            } else {
-                data = await response.json();
-            }
+            const data = await response.json();
 
             if ((website === 'cnn-news' || website === 'bbc-news') && data.status === 'ok') {
                 articles = data.articles.slice(0, 10);
@@ -80,19 +72,25 @@ app.get('/news', async (req, res) => {
                 articles = data.response.results.slice(0, 10);
             } else if (website === 'nytimes-news' && data.status === 'OK') {
                 articles = data.results.slice(0, 10);
-            } else if (website === 'toi-news' && data.length > 0) {
-                articles = data.map(item => ({
-                    title: item.title[0],
-                    link: item.link[0]
-                }));
+            } else if (website === 'livemint-news' && data.status === 'success') {
+                articles = data.results.slice(0, 10);
             } else {
                 throw new Error(`Failed to fetch news headlines from ${website}`);
             }
 
             articles = await Promise.all(
                 articles.map(async article => {
-                    const title = website === 'guardian-news' ? article.webTitle : article.title;
-                    const link = website === 'guardian-news' ? article.webUrl : article.url;
+                    let title, link;
+                    if (website === 'guardian-news') {
+                        title = article.webTitle;
+                        link = article.webUrl;
+                    } else if (website === 'livemint-news') {
+                        title = article.title;
+                        link = `${article.link}`;
+                    } else {
+                        title = article.title;
+                        link = article.url;
+                    }
                     const sentiment = await getSentiment(title);
                     return { title, link, sentiment };
                 })

@@ -64,7 +64,7 @@ app.get('/news', async (req, res) => {
                 if (website === 'toi-news') {
                     articles = articles.map(article => ({
                         ...article,
-                        link: `https://timesofindia.indiatimes.com${article.link}`
+                        link: `${article.link}`
                     }));
                 }
 
@@ -94,7 +94,7 @@ app.get('/news', async (req, res) => {
                         link = article.webUrl;
                     } else if (website === 'livemint-news') {
                         title = article.title;
-                        link = `https://www.livemint.com${article.link}`;
+                        link = `${article.link}`;
                     } else {
                         title = article.title;
                         link = article.url;

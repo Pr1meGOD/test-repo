@@ -17,7 +17,7 @@ app.use((req, res, next) => {
 app.get('/news', async (req, res) => {
     try {
         const apiKey = 'pub_45625139de47ae7f0dedc29fd05a6dab95b0c';
-        const response = await fetch(`https://newsdata.io/api/1/news?apikey=pub_45625139de47ae7f0dedc29fd05a6dab95b0c&q=https://www.ndtv.com/ `);
+        const response = await fetch(`https://newsdata.io/api/1/news?apikey=pub_45625139de47ae7f0dedc29fd05a6dab95b0c&q=https://indianexpress.com/&language=en`);
         const data = await response.json();
 
         if (data.status === 'success') {

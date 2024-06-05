@@ -3,74 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News Headlines Sentiment Analysis</title>
+    <title>News Sentiment Analysis</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            background-color: #0077b6;
+            color: white;
+            padding: 1em 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+        main {
+            flex: 1;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #search-bar {
+            padding: 15px;
+            width: 80%;
+            max-width: 500px;
+            margin: 20px auto;
+            display: block;
+            border: 2px solid #0077b6;
+            border-radius: 5px;
+            font-size: 1em;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s ease;
+        }
+        #search-bar:focus {
+            border-color: #005f86;
+            outline: none;
+        }
+        #search-button {
+            padding: 15px 30px;
+            margin: 20px auto;
+            display: block;
+            border: none;
+            background-color: #0077b6;
+            color: white;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+        #search-button:hover {
+            background-color: #005f86;
         }
         .headline {
-            margin-bottom: 20px;
+            background-color: white;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            text-align: left;
+            position: relative;
+        }
+        .headline::before {
+            content: attr(data-number) ".";
+            position: absolute;
+            top: 50%;
+            left: -25px;
+            transform: translateY(-50%);
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #0077b6;
         }
         .headline a {
             text-decoration: none;
-            color: #007BFF;
-        }
-        .headline .sentiment {
+            color: #0077b6;
+            font-size: 1.1em;
             font-weight: bold;
+        }
+        .headline a:hover {
+            text-decoration: underline;
+        }
+        .sentiment {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #555;
+        }
+        #news-container {
+            width: 100%;
+            max-width: 600px;
+            padding: 0 20px;
         }
     </style>
 </head>
 <body>
-    <h1>Top 10 News Headlines with Sentiment Analysis</h1>
-    <div id="news-container"></div>
-
+    <header>
+        <h1>News Sentiment Analysis</h1>
+    </header>
+    <main>
+        <input type="text" id="search-bar" placeholder="Enter news website (e.g., cnn-news, bbc-news, guardian-news, nytimes-news, toi-news, ht-news, ie-news)">
+        <button id="search-button" onclick="fetchNews()">Get News</button>
+        <div id="news-container"></div>
+    </main>
     <script>
-        async function fetchSentiment(title) {
-            try {
-                const response = await fetch('https://xhkc56io19.execute-api.us-east-1.amazonaws.com/dev', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ text: title })
-                });
-                const result = await response.json();
-                const sentimentData = JSON.parse(result.body);
-                return sentimentData.sentiment;
-            } catch (error) {
-                console.error('Error fetching sentiment:', error);
-                return 'N/A';
-            }
-        }
-
         async function fetchNews() {
-            try {
-                const response = await fetch('http://localhost:3000/news');
-                const newsHeadlines = await response.json();
-
-                const newsContainer = document.getElementById('news-container');
-                newsContainer.innerHTML = '';
-
-                for (const { title, link } of newsHeadlines) {
-                    const sentiment = await fetchSentiment(title);
-                    const headlineDiv = document.createElement('div');
-                    headlineDiv.classList.add('headline');
-                    headlineDiv.innerHTML = `
-                        <a href="${link}" target="_blank">${title}</a>
-                        <span class="sentiment">[Sentiment: ${sentiment}]</span>
-                    `;
-                    newsContainer.appendChild(headlineDiv);
-                }
-            } catch (error) {
-                console.error('Error fetching news headlines:', error);
-                document.getElementById('news-container').innerText = 'Failed to load news headlines';
+            const newsSource = document.getElementById('search-bar').value.trim();
+            if (!newsSource) {
+                alert('Please enter a news website.');
+                return;
             }
-        }
 
-        document.addEventListener('DOMContentLoaded', fetchNews);
+            const response = await fetch(`http://localhost:3000/news?website=${newsSource}`);
+            const news = await response.json();
+            const newsContainer = document.getElementById('news-container');
+            newsContainer.innerHTML = '';
+
+            news.forEach((item, index) => {
+                const headlineDiv = document.createElement('div');
+                headlineDiv.className = 'headline';
+                headlineDiv.setAttribute('data-number', index + 1);
+
+                const titleLink = document.createElement('a');
+                titleLink.href = item.link;
+                titleLink.textContent = item.title;
+                titleLink.target = '_blank';
+
+                const sentimentDiv = document.createElement('div');
+                sentimentDiv.className = 'sentiment';
+                sentimentDiv.textContent = `Sentiment: ${item.sentiment}`;
+
+                headlineDiv.appendChild(titleLink);
+                headlineDiv.appendChild(sentimentDiv);
+                newsContainer.appendChild(headlineDiv);
+            });
+        }
     </script>
-</body> 
+</body>
 </html>
 
 

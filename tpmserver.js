@@ -43,6 +43,8 @@ app.get('/news', async (req, res) => {
             apiUrl = `https://newsdata.io/api/1/news?apikey=${newsdataApiKey}&q=https://indianexpress.com/&language=en`;
         } else if (website === 'nbc-news') {
             apiUrl = `https://newsdata.io/api/1/news?apikey=pub_4567897d90734c71bf518d4098e2d2345a31c&q=https://www.nbcnews.com/`;
+        } else if (website === 'thehindu-news') {
+            apiUrl = `https://newsdata.io/api/1/news?apikey=${newsdataApiKey}&q=https://www.thehindu.com/`;
         } else {
             return res.status(400).json({ error: 'Unsupported website' });
         }
@@ -85,7 +87,7 @@ app.get('/news', async (req, res) => {
                 articles = data.response.results.slice(0, 10);
             } else if (website === 'nytimes-news' && data.status === 'OK') {
                 articles = data.results.slice(0, 10);
-            } else if (website === 'livemint-news' || website === 'ie-news' || website === 'nbc-news') {
+            } else if (website === 'livemint-news' || website === 'ie-news' || website === 'nbc-news' || website === 'thehindu-news') {
                 articles = data.results.slice(0, 10);
             } else {
                 throw new Error(`Failed to fetch news headlines from ${website}`);
@@ -97,7 +99,7 @@ app.get('/news', async (req, res) => {
                     if (website === 'guardian-news') {
                         title = article.webTitle;
                         link = article.webUrl;
-                    } else if (website === 'livemint-news' || website === 'ie-news' || website === 'nbc-news') {
+                    } else if (website === 'livemint-news' || website === 'ie-news' || website === 'nbc-news' || website === 'thehindu-news') {
                         title = article.title;
                         link = `${article.link}`;
                     } else {

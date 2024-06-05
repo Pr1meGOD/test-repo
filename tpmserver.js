@@ -13,6 +13,7 @@ const cnnApiKey = 'e382cf0baf104c3ca084d880a340dfa9';
 const bbcApiKey = '8299ddae71074acd8232edcfef9b7fb8';
 const guardianApiKey = '4c73a5e6-93d1-4051-8e96-933b8d4fa06b';
 const nytimesApiKey = 'LMv5Elsw8GmMHGOhyr3MQTuSGHNWgxgu';
+const newsdataApiKey = 'pub_45625139de47ae7f0dedc29fd05a6dab95b0c'; // Use your actual API key here
 
 app.get('/news', async (req, res) => {
     const website = req.query.website;
@@ -37,7 +38,9 @@ app.get('/news', async (req, res) => {
         } else if (website === 'ht-news') {
             apiUrl = `https://www.hindustantimes.com/feeds/rss/india-news/rssfeed.xml`;
         } else if (website === 'livemint-news') {
-            apiUrl = `https://newsdata.io/api/1/news?apikey=pub_4553266773c7d8f5c57a2944449b3041a19b2&q=https://www.livemint.com/`;
+            apiUrl = `https://newsdata.io/api/1/news?apikey=${newsdataApiKey}&q=https://www.livemint.com/&language=en`;
+        } else if (website === 'ie-news') {
+            apiUrl = `https://newsdata.io/api/1/news?apikey=${newsdataApiKey}&q=https://indianexpress.com/&language=en`;
         } else {
             return res.status(400).json({ error: 'Unsupported website' });
         }
@@ -80,7 +83,7 @@ app.get('/news', async (req, res) => {
                 articles = data.response.results.slice(0, 10);
             } else if (website === 'nytimes-news' && data.status === 'OK') {
                 articles = data.results.slice(0, 10);
-            } else if (website === 'livemint-news' && data.status === 'success') {
+            } else if (website === 'livemint-news' || website === 'ie-news') {
                 articles = data.results.slice(0, 10);
             } else {
                 throw new Error(`Failed to fetch news headlines from ${website}`);
@@ -92,7 +95,7 @@ app.get('/news', async (req, res) => {
                     if (website === 'guardian-news') {
                         title = article.webTitle;
                         link = article.webUrl;
-                    } else if (website === 'livemint-news') {
+                    } else if (website === 'livemint-news' || website === 'ie-news') {
                         title = article.title;
                         link = `${article.link}`;
                     } else {

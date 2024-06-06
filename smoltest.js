@@ -16,8 +16,8 @@ app.use((req, res, next) => {
 // API endpoint to fetch news headlines and perform sentiment analysis
 app.get('/news', async (req, res) => {
     try {
-        const apiKey = 'pub_45625139de47ae7f0dedc29fd05a6dab95b0c';
-        const response = await fetch(`https://newsdata.io/api/1/news?apikey=pub_45625139de47ae7f0dedc29fd05a6dab95b0c&q=https://www.ndtv.com/ `);
+        const apiKey = 'pub_45702963c65c4021894ccf1858d05f001f0e0';
+        const response = await fetch(`https://newsdata.io/api/1/news?apikey=pub_45702963c65c4021894ccf1858d05f001f0e0&q=https://zeenews.india.com/&language=en `);
         const data = await response.json();
 
         if (data.status === 'success') {

@@ -47,7 +47,7 @@ app.get('/news', async (req, res) => {
             apiUrl = `https://newsdata.io/api/1/news?apikey=${newsdataApiKey}&q=https://www.thehindu.com/`;
         } else if (website === 'zee-news') {
             apiUrl = `https://newsdata.io/api/1/news?apikey=pub_45702963c65c4021894ccf1858d05f001f0e0&q=https://zeenews.india.com/&language=en`;
-        } else if (website === 'washingtonpost-news') {
+        } else if (website === 'wp-news') {
             apiUrl = `https://newsdata.io/api/1/news?apikey=pub_45702963c65c4021894ccf1858d05f001f0e0&q=https://www.washingtonpost.com/&language=en`;
         } else {
             return res.status(400).json({ error: 'Unsupported website' });
@@ -91,7 +91,7 @@ app.get('/news', async (req, res) => {
                 articles = data.response.results.slice(0, 10);
             } else if (website === 'nytimes-news' && data.status === 'OK') {
                 articles = data.results.slice(0, 10);
-            } else if (website === 'livemint-news' || website === 'ie-news' || website === 'nbc-news' || website === 'thehindu-news' || website === 'zee-news' || website === 'washingtonpost-news') {
+            } else if (website === 'livemint-news' || website === 'ie-news' || website === 'nbc-news' || website === 'thehindu-news' || website === 'zee-news' || website === 'wp-news') {
                 articles = data.results.slice(0, 10);
             } else {
                 throw new Error(`Failed to fetch news headlines from ${website}`);
@@ -103,7 +103,7 @@ app.get('/news', async (req, res) => {
                     if (website === 'guardian-news') {
                         title = article.webTitle;
                         link = article.webUrl;
-                    } else if (website === 'livemint-news' || website === 'ie-news' || website === 'nbc-news' || website === 'thehindu-news' || website === 'zee-news' || website === 'washingtonpost-news') {
+                    } else if (website === 'livemint-news' || website === 'ie-news' || website === 'nbc-news' || website === 'thehindu-news' || website === 'zee-news' || website === 'wp-news') {
                         title = article.title;
                         link = `${article.link}`;
                     } else {

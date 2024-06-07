@@ -62,7 +62,7 @@ app.get('/news', async (req, res) => {
         } else if (website === 'indiatoday-news') {
             apiUrl = `https://newsdata.io/api/1/news?apikey=pub_4568352b5e63671c676e20c29210bf5a47d71&q=https://www.indiatoday.in/&language=en`;
         } else if (website === 'firstpost-news') {
-            apiUrl = `https://newsdata.io/api/1/news?apikey=pub_4567897d90734c71bf518d4098e2d2345a31c&q=https://www.firstpost.com/`;
+            apiUrl = `https://newsdata.io/api/1/news?apikey=pub_4567897d90734c71bf518d4098e2d2345a31c&q=https://www.firstpost.com/&language=en`;
         } else {
             return res.status(400).json({ error: 'Unsupported website' });
         }
@@ -139,16 +139,16 @@ app.get('/news', async (req, res) => {
 
 async function getSentiment(title) {
     try {
-        const sentimentAPI = "https://xhkc56io19.execute-api.us-east-1.amazonaws.com/prod/sentiment";
-        const sentimentResponse = await axios.post(sentimentAPI, { text: title });
-        return sentimentResponse.data;
+        const sentimentAPI = "https://xhkc56io19.execute-api.us-east-1.amazonaws.com/dev";
+        const response = await axios.post(sentimentAPI, { text: title });
+        const sentimentData = JSON.parse(response.data.body);
+        return sentimentData.sentiment;
     } catch (error) {
         console.error('Error fetching sentiment:', error);
-        return 'Neutral';
+        return 'N/A';
     }
 }
 
 app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
+    console.log(`Backend server running at http://localhost:${port}`);
 });
-

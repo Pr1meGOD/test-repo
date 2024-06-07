@@ -16,7 +16,7 @@ app.use((req, res, next) => {
 // API endpoint to fetch news headlines and perform sentiment analysis
 app.get('/news', async (req, res) => {
     try {
-        const apiKey = 'pub_45625139de47ae7f0dedc29fd05a6dab95b0c';
+        const apiKey = 'pub_4553266773c7d8f5c57a2944449b3041a19b2';
         const response = await fetch(`https://newsdata.io/api/1/news?apikey=pub_4553266773c7d8f5c57a2944449b3041a19b2&q=https://www.vox.com/&language=en `);
         const data = await response.json();
 

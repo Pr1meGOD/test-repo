@@ -17,7 +17,7 @@ app.use((req, res, next) => {
 app.get('/news', async (req, res) => {
     try {
         const apiKey = 'pub_4567897d90734c71bf518d4098e2d2345a31c';
-        const response = await fetch(`https://newsdata.io/api/1/news?apikey=pub_45625139de47ae7f0dedc29fd05a6dab95b0c&q=https://www.deccanchronicle.com/ `);
+        const response = await fetch(`https://newsdata.io/api/1/news?apikey=pub_45625139de47ae7f0dedc29fd05a6dab95b0c&q=https://www.deccanchronicle.com/`);
         const data = await response.json();
 
         if (data.status === 'success') {

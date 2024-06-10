@@ -75,10 +75,12 @@ app.get('/news', async (req, res) => {
             apiUrl = `https://newsdata.io/api/1/news?apikey=pub_46055dd31b8f4667dc66d976f583b226b4150&q=https://www.newsweek.com/&language=en`;
         } else if (website === 'firstpost-news') {
             apiUrl = `https://newsdata.io/api/1/news?apikey=pub_4567897d90734c71bf518d4098e2d2345a31c&q=https://www.firstpost.com/ `;
+        } else if (website === 'bi-news') {
+            apiUrl = `https://newsdata.io/api/1/news?apikey=pub_46055dd31b8f4667dc66d976f583b226b4150&q=https://www.businessinsider.in&language=en `;
         } else {
             return res.status(400).json({ error: 'Unsupported website' });
         }
-
+        
         let articles = [];
 
         if (website === 'ht-news' || website === 'toi-news') {
@@ -117,7 +119,7 @@ app.get('/news', async (req, res) => {
                 articles = data.response.results.slice(0, 10);
             } else if (website === 'nytimes-news' && data.status === 'OK') {
                 articles = data.results.slice(0, 10);
-            } else if (website === 'livemint-news' || website === 'ie-news' || website === 'nbc-news' || website === 'thehindu-news' || website === 'zee-news' || website === 'wp-news' || website === 'forbes-news' || website === 'fox-news' || website === 'news18-news' || website === 'time-news' || website === 'vox-news' || website === 'indiatoday-news' || website === 'dc-news' || website === 'ndtv-news' || website === 'huffpost-news' || website === 'dna-news' || website === 'abp-news' || website === 'newsweek-news' || website === 'firstpost-news') {
+            } else if (website === 'livemint-news' || website === 'ie-news' || website === 'nbc-news' || website === 'thehindu-news' || website === 'zee-news' || website === 'wp-news' || website === 'forbes-news' || website === 'fox-news' || website === 'news18-news' || website === 'time-news' || website === 'vox-news' || website === 'indiatoday-news' || website === 'dc-news' || website === 'ndtv-news' || website === 'huffpost-news' || website === 'dna-news' || website === 'abp-news' || website === 'newsweek-news' || website === 'firstpost-news' || website === 'bi-news') {
                 articles = data.results.slice(0, 10);
             } else {
                 throw new Error(`Failed to fetch news headlines from ${website}`);
@@ -129,7 +131,7 @@ app.get('/news', async (req, res) => {
                     if (website === 'guardian-news') {
                         title = article.webTitle;
                         link = article.webUrl;
-                    } else if (website === 'livemint-news' || website === 'ie-news' || website === 'nbc-news' || website === 'thehindu-news' || website === 'zee-news' || website === 'wp-news' || website === 'forbes-news' || website === 'fox-news' || website === 'news18-news' || website === 'time-news' || website === 'vox-news' || website === 'indiatoday-news' || website === 'dc-news' || website === 'ndtv-news' || website === 'huffpost-news' || website === 'dna-news' || website === 'abp-news' || website === 'newsweek-news' || website === 'firstpost-news') {
+                    } else if (website === 'livemint-news' || website === 'ie-news' || website === 'nbc-news' || website === 'thehindu-news' || website === 'zee-news' || website === 'wp-news' || website === 'forbes-news' || website === 'fox-news' || website === 'news18-news' || website === 'time-news' || website === 'vox-news' || website === 'indiatoday-news' || website === 'dc-news' || website === 'ndtv-news' || website === 'huffpost-news' || website === 'dna-news' || website === 'abp-news' || website === 'newsweek-news' || website === 'firstpost-news' || website === 'bi-news') {
                         title = article.title;
                         link = `${article.link}`;
                     } else {

@@ -79,10 +79,12 @@ app.get('/news', async (req, res) => {
             apiUrl = `https://newsdata.io/api/1/news?apikey=pub_46055dd31b8f4667dc66d976f583b226b4150&q=https://www.businessinsider.in&language=en `;
         } else if (website === 'ign-news') {
             apiUrl = `https://newsdata.io/api/1/news?apikey=pub_46055dd31b8f4667dc66d976f583b226b4150&q=https://in.ign.com/&language=en `;
+        } else if (website === 'ign-news') {
+            apiUrl = `https://newsdata.io/api/1/news?apikey=pub_46070599d3be50dc47d16188b9c0e0c2f66ff&q=https://www.npr.org/`;
         } else {
             return res.status(400).json({ error: 'Unsupported website' });
         }
-        
+       
         let articles = [];
 
         if (website === 'ht-news' || website === 'toi-news') {

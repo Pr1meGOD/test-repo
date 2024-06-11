@@ -21,7 +21,7 @@ app.get('/news', async (req, res) => {
     if (!website) {
         return res.status(400).json({ error: 'Website is required' });
     }
-
+    
     try {
         let apiUrl;
 

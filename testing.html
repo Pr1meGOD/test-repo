@@ -334,7 +334,7 @@
                 return;
             }
 
-            const response = await fetch(`https://25603d0f-bf09-4aa7-9f43-1b008fcf290d-00-240omhum3fjti.pike.replit.dev/news?website=${newsSource}`);
+            const response = await fetch(`http://localhost:3000/news?website=${newsSource}`);
             const news = await response.json();
             const newsContainer = document.getElementById('news-container');
             newsContainer.innerHTML = '';

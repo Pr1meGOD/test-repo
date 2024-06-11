@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Time News Feed Sentiment Analysis</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Karla:wght@300;400;500;600;700&display=swap');
+        * {
+            background-color: black;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Karla', sans-serif;
+        }
+        body {
+            color: #fff;
+        }
+        .container {
+            width: 100%;
+            height: 100vh;
+            background-position: center;
+            background-size: cover;
+            padding-top: 35px;
+            padding-left: 8%;
+            padding-right: 8%;
+        }
+        nav {
+            margin-top: -7.5px;
+            padding: 10px 0;
+            margin-right: 112px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            font-size: 33px;
+            text-decoration: none;
+        }
+        span {
+            color: #f9004d;
+        }
+        nav ul li {
+            display: inline-block;
+            font-size: 16px;
+            list-style: none;
+            margin: 10px 30px;
+        }
+        nav ul li a {
+            text-decoration: none;
+            transition: 0.5s;
+            color: white;
+        }
+        nav ul li a:hover {
+            color: #f9004d;
+        }
+        .content {
+            display: flex;
+            justify-content: space-between;
+        }
+        .abbreviations {
+            width: 40%;
+            display: flex;
+            flex-direction: column;
+        }
+        .abbreviations h2 {
+            font-size: 25px;
+            margin-bottom: 20px;
+        }
+        .abbreviations .sites-abbreviations {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            column-gap: 10px;
+            row-gap: 10px;
+        }
+        .abbreviations .sites-abbreviations p {
+            font-size: 18px;
+            line-height: 1.5;
+        }
+        .abbreviations .numbered-item::before {
+            content: attr(data-number) ". ";
+            font-weight: bold;
+        }
+        main {
+            width: 60%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 80%;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+        #search-bar {
+            padding: 15px;
+            flex: 1;
+            border: 2px solid #f9004d;
+            border-radius: 5px;
+            font-size: 1em;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s ease;
+            color: white;
+            margin-right: 10px;
+        }
+        #search-bar:focus {
+            border-color: #c60039;
+            outline: none;
+        }
+        #search-button {
+            padding: 15px 30px;
+            border: none;
+            background-color: #f9004d;
+            color: white;
+            border-radius: 5px;
+            font-size: 1em;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+        #search-button:hover {
+            background-color: #c60039;
+            cursor: pointer;
+        }
+        .headline {
+            background-color: white;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            text-align: left;
+            position: relative;
+        }
+        .headline::before {
+            content: attr(data-number) ".";
+            position: absolute;
+            top: 50%;
+            left: -25px;
+            transform: translateY(-50%);
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #f9004d;
+        }
+        .headline a {
+            text-decoration: none;
+            color: #f9004d;
+            font-size: 1.1em;
+            font-weight: bold;
+            background-color: white;
+        }
+        .headline a:hover {
+            text-decoration: underline;
+        }
+        .sentiment {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #000000;
+            background-color: white;
+            font-weight: bold;
+        }
+        #news-container {
+            width: 100%;
+            max-width: 600px;
+            padding: 0 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="container">
+        <nav>
+            <div class="logo">
+                <b>SENTIMENT<span> ANALYSIS</span></b>
+            </div>
+            <ul>
+                <li><a href="home-SA.html">Home</a></li>
+                <li><a href="basic_SA.html" target="_blank">Basic Sentiment Analysis</a></li>
+                <li><a href="Real-time-SA.html" target="_blank">Real Time News Feed Sentiment Analysis</a></li>
+            </ul>
+        </nav>
+        <hr>
+        <br><br>
+
+        <!-- Main content area -->
+        <div class="content">
+            <!-- Abbreviations section -->
+            <div class="abbreviations">
+                <h2>Available News Websites and Abbreviations</h2>
+                <div class="sites-abbreviations">
+                    <p class="numbered-item" data-number="1">cnn.com</p>
+                    <p>-</p>
+                    <p>cnn-news</p>
+                    <p class="numbered-item" data-number="2">bbc.com</p>
+                    <p>-</p>
+                    <p>bbc-news</p>
+                    <p class="numbered-item" data-number="3">guardian.com</p>
+                    <p>-</p>
+                    <p>guardian-news</p>
+                    <p class="numbered-item" data-number="4">nytimes.com</p>
+                    <p>-</p>
+                    <p>nytimes-news</p>
+                    <p class="numbered-item" data-number="5">timesofindia.com</p>
+                    <p>-</p>
+                    <p>toi-news</p>
+                    <p class="numbered-item" data-number="6">hindustantimes.com</p>
+                    <p>-</p>
+                    <p>ht-news</p>
+                    <p class="numbered-item" data-number="7">livemint.com</p>
+                    <p>-</p>
+                    <p>livemint-news</p>
+                    <p class="numbered-item" data-number="8">indianexpress.com</p>
+                    <p>-</p>
+                    <p>ie-news</p>
+                    <p class="numbered-item" data-number="9">nbc.com</p>
+                    <p>-</p>
+                    <p>nbc-news</p>
+                    <p class="numbered-item" data-number="10">thehindu.com</p>
+                    <p>-</p>
+                    <p>thehindu-news</p>
+                    <p class="numbered-item" data-number="11">zeenews.com</p>
+                    <p>-</p>
+                    <p>zee-news</p>
+                    <p class="numbered-item" data-number="12">washingtonpost.com</p>
+                    <p>-</p>
+                    <p>wp-news</p>
+                    <p class="numbered-item" data-number="13">forbes.com</p>
+                    <p>-</p>
+                    <p>forbes-news</p>
+                    <p class="numbered-item" data-number="14">foxnews.com</p>
+                    <p>-</p>
+                    <p>fox-news</p>
+                    <p class="numbered-item" data-number="15">news18.com</p>
+                    <p>-</p>
+                    <p>news18-news</p>
+                    <p class="numbered-item" data-number="16">time.com</p>
+                    <p>-</p>
+                    <p>time-news</p>
+                    <p class="numbered-item" data-number="17">vox.com</p>
+                    <p>-</p>
+                    <p>vox-news</p>
+                    <p class="numbered-item" data-number="18">abcnews.go.com</p>
+                    <p>-</p>
+                    <p>abc-news</p>
+                    <p class="numbered-item" data-number="19">bloomberg.com</p>
+                    <p>-</p>
+                    <p>bloomberg-news</p>
+                    <p class="numbered-item" data-number="20">businessinsider.com</p>
+                    <p>-</p>
+                    <p>bi-news</p>
+                    <p class="numbered-item" data-number="21">cnbc.com</p>
+                    <p>-</p>
+                    <p>cnbc-news</p>
+                </div>
+            </div>
+
+            <!-- Search bar section -->
+            <main>
+                <div class="search-container">
+                    <input type="text" id="search-bar" placeholder="Enter news website...">
+                    <button id="search-button">Search</button>
+                </div>
+                <div id="news-container"></div>
+            </main>
+        </div>
+    </div>
+
+    <!-- JavaScript function -->
+    <script>
+        const API_KEY = 'YOUR_API_KEY'; // Replace 'YOUR_API_KEY' with your actual API key
+
+        document.getElementById('search-button').addEventListener('click', fetchNews);
+
+        async function fetchNews() {
+            const query = document.getElementById('search-bar').value;
+            const url = `https://newsapi.org/v2/everything?q=${query}&apiKey=${API_KEY}`;
+
+            const response = await fetch(url);
+            const data = await response.json();
+
+            const newsContainer = document.getElementById('news-container');
+            newsContainer.innerHTML = '';
+
+            if (data.articles.length > 0) {
+                data.articles.forEach((article, index) => {
+                    const headlineElement = document.createElement('div');
+                    headlineElement.classList.add('headline');
+                    headlineElement.setAttribute('data-number', index + 1);
+
+                    const headlineLink = document.createElement('a');
+                    headlineLink.href = article.url;
+                    headlineLink.target = '_blank';
+                    headlineLink.innerText = article.title;
+
+                    const sentimentElement = document.createElement('div');
+                    sentimentElement.classList.add('sentiment');
+                    // For now, we'll use a placeholder for sentiment analysis
+                    sentimentElement.innerText = 'Sentiment: Analyzing...';
+
+                    headlineElement.appendChild(headlineLink);
+                    headlineElement.appendChild(sentimentElement);
+
+                    newsContainer.appendChild(headlineElement);
+                });
+            } else {
+                newsContainer.innerHTML = '<p>No news articles found.</p>';
+            }
+        }
+    </script>
+</body>
+</html>

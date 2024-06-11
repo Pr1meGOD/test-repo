@@ -336,7 +336,7 @@
                 return;
             }
 
-            const response = await fetch(`https://89febbf8-d6a1-4780-879b-8b71759c38cf-00-8oy4ua4jq8xu.sisko.replit.dev/${newsSource}`);
+            const response = await fetch(`https://89febbf8-d6a1-4780-879b-8b71759c38cf-00-8oy4ua4jq8xu.sisko.replit.dev/news?website=${newsSource}`);
             const news = await response.json();
             const newsContainer = document.getElementById('news-container');
             newsContainer.innerHTML = '';

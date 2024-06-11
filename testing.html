@@ -334,7 +334,7 @@
                 return;
             }
 
-            const response = await fetch(`http://localhost:3000/news?website=${newsSource}`);
+            const response = await fetch(`https://d9f4fa9e-3fa6-4f0b-b050-b51c3e8240b1-00-j383xofmnrq5.sisko.replit.dev/news?website=${newsSource}`);
             const news = await response.json();
             const newsContainer = document.getElementById('news-container');
             newsContainer.innerHTML = '';
